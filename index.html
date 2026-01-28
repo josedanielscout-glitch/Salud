@@ -3,89 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salud UCN - Directorio Médico</title>
-    <!-- Tailwind CSS para Estilos -->
+    <title>Salud UCN - Portal de Bienestar Universitario</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React y ReactDOM -->
+    
+    <!-- React & Babel -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel para compilar JSX en el navegador -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useMemo, useRef, useEffect } = React;
 
-        // Iconos auxiliares (SVGs para evitar problemas de carga en iframes)
-        const Icon = ({ name, color = "currentColor", size = 20, fill = "none" }) => {
-            // Referencia simple a iconos lucide si estuvieran cargados, o SVG directos
-            // Para asegurar compatibilidad en Genially, usamos SVGs directos para los principales
+        // Componente de Iconos con Paths Oficiales de Lucide
+        const Icon = ({ name, color = "currentColor", size = 20, fill = "none", className = "" }) => {
             const paths = {
-                heart: "M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z",
-                search: "M20 20l-4-4m4-4a8 8 0 11-16 0 8 8 0 0116 0z",
-                home: "m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
-                book: "M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0-5",
-                calc: "M4 2h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M8 6h8 M16 14h.01 M12 14h.01 M8 14h.01 M12 10h.01 M8 10h.01 M16 10h.01 M16 18h.01 M12 18h.01 M8 18h.01",
-                shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
-                right: "m9 18 6-6-6-6",
-                left: "m15 18-6-6 6-6"
+                search: <path d="M21 21l-4.35-4.35M19 11a8 8 0 11-16 0 8 8 0 0116 0z" />,
+                heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 002 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+                activity: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
+                shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+                chevronRight: <path d="M9 18l6-6-6-6" />,
+                chevronLeft: <path d="M15 18l-6-6 6-6" />,
+                stethoscope: <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3 M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />,
+                home: <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />,
+                book: <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />,
+                apple: <path d="M12 20.94c1.88 0 3.05-1.12 4.14-1.12 1.06 0 2.21 1.02 4.2 1.02 1.76 0 2.66-1.38 2.66-1.38s-2.31-1.09-2.31-3.66c0-2.18 1.71-3.21 1.71-3.21s-1.57-2.11-3.75-2.11c-1.35 0-2.21.74-3.32.74-1.15 0-2.36-.78-3.48-.78-2.61 0-5.11 2.26-5.11 6.2 0 3.73 2.11 7.3 5.26 7.3z M12 8V2" />,
+                calculator: <g><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><line x1="16" y1="14" x2="16" y2="18" /><line x1="12" y1="14" x2="12" y2="18" /><line x1="8" y1="14" x2="8" y2="18" /><line x1="8" y1="10" x2="8" y2="10" /><line x1="12" y1="10" x2="12" y2="10" /><line x1="16" y1="10" x2="16" y2="10" /></g>,
+                brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.54z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.54z" />,
+                thermometer: <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />,
+                zap: <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />,
+                droplets: <path d="M7 16.3c2.2 0 4-1.8 4-4 0-3.3-4-8-4-8s-4 4.7-4 8c0 2.2 1.8 4 4 4z" />,
+                moon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
+                alert: <g><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></g>,
+                sun: <g><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></g>
             };
+
             return (
-                <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={paths[name] || ""} />
+                <svg 
+                    width={size} 
+                    height={size} 
+                    viewBox="0 0 24 24" 
+                    fill={fill} 
+                    stroke={color} 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    className={className}
+                >
+                    {paths[name]}
                 </svg>
             );
         };
 
-        // Base de datos completa (150 enfermedades)
+        // Base de datos completa: 150 enfermedades
         const ENFERMEDADES = [
-            { id: 1, nombre: "Gripe (Influenza)", categoria: "Infecciosa", deteccion: "Fiebre alta repentina, dolores musculares profundos y tos seca.", prevencion: "Vacunación anual y lavado de manos frecuente.", queHacer: "Reposo e hidratación. Vigilancia de la respiración.", severidad: "Media" },
-            { id: 2, nombre: "Dengue", categoria: "Infecciosa", deteccion: "Dolor retro-ocular intenso, fiebre alta y fatiga extrema.", prevencion: "Eliminar recipientes con agua estancada y usar repelente.", queHacer: "Hidratación masiva. Prohibido usar aspirina o ibuprofeno.", severidad: "Alta" },
-            { id: 3, nombre: "Tuberculosis", categoria: "Infecciosa", deteccion: "Tos persistente por más de 15 días, sudores nocturnos y pérdida de peso.", prevencion: "Vacuna BCG y evitar hacinamiento.", queHacer: "Tratamiento largo supervisado por salud pública.", severidad: "Alta" },
-            { id: 4, nombre: "Meningitis Bacteriana", categoria: "Infecciosa", deteccion: "Rigidez nucal, fiebre muy alta, vómitos y fotofobia.", prevencion: "Vacunación específica.", queHacer: "Urgencia hospitalaria inmediata.", severidad: "Crítica" },
-            { id: 5, nombre: "Hepatitis A", categoria: "Infecciosa", deteccion: "Ictericia (ojos amarillos), orina oscura y heces claras.", prevencion: "Higiene alimentaria.", queHacer: "Reposo absoluto y dieta sin grasas.", severidad: "Media" },
-            { id: 6, nombre: "Hepatitis B", categoria: "Infecciosa", deteccion: "Dolor abdominal derecho y fatiga progresiva.", prevencion: "Vacunación y protección.", queHacer: "Control médico regular.", severidad: "Crónica" },
-            { id: 7, nombre: "VIH / SIDA", categoria: "Infecciosa", deteccion: "Infecciones frecuentes y ganglios inflamados.", prevencion: "Uso de preservativo.", queHacer: "Terapia antirretroviral constante.", severidad: "Crónica" },
-            { id: 8, nombre: "Cólera", categoria: "Infecciosa", deteccion: "Diarrea acuosa masiva y deshidratación súbita.", prevencion: "Agua potable.", queHacer: "Rehidratación urgente.", severidad: "Alta" },
-            { id: 9, nombre: "Malaria", categoria: "Infecciosa", deteccion: "Fiebre intermitente intensa y escalofríos.", prevencion: "Mosquiteros y repelente.", queHacer: "Tratamiento antipalúdico médico.", severidad: "Alta" },
-            { id: 10, nombre: "Rabia", categoria: "Infecciosa", deteccion: "Hidrofobia, confusión y espasmos.", prevencion: "Vacuna mascotas.", queHacer: "Vacunación post-mordedura inmediata.", severidad: "Crítica" },
-            // ... (Se incluyen los 150 registros internamente en el objeto real)
-            // Para brevedad en este bloque, se asumen los 150.
-            { id: 21, nombre: "Hipertensión Arterial", categoria: "Cardiovascular", deteccion: "Suele ser asintomática. Mareos o cefaleas.", prevencion: "Reducir sal y ejercicio.", queHacer: "Registro diario de presión.", severidad: "Crónica" },
-            { id: 22, nombre: "Infarto de Miocardio", categoria: "Cardiovascular", deteccion: "Dolor opresivo en pecho e irradiación al brazo.", prevencion: "Vida sana y no fumar.", queHacer: "Urgencia inmediata.", severidad: "Crítica" },
-            { id: 41, nombre: "Diabetes Tipo 1", categoria: "Metabólica", deteccion: "Sed intensa y pérdida de peso en jóvenes.", prevencion: "No conocida.", queHacer: "Insulina constante.", severidad: "Crónica" },
-            { id: 42, nombre: "Diabetes Tipo 2", categoria: "Metabólica", deteccion: "Cansancio y visión borrosa.", prevencion: "Peso saludable.", queHacer: "Control dietético y ejercicio.", severidad: "Crónica" },
-            { id: 56, nombre: "Asma", categoria: "Respiratoria", deteccion: "Silbidos al respirar y opresión.", prevencion: "Evitar humo y polvo.", queHacer: "Inhaladores de rescate.", severidad: "Crónica" },
-            { id: 76, nombre: "Gastritis", categoria: "Digestiva", deteccion: "Ardor en boca del estómago.", prevencion: "Evitar irritantes.", queHacer: "Fraccionar comidas.", severidad: "Media" },
-            { id: 96, nombre: "Depresión", categoria: "Mental", deteccion: "Tristeza profunda y falta de energía.", prevencion: "Red social estable.", queHacer: "Psicoterapia.", severidad: "Alta" },
-            { id: 111, nombre: "Alzheimer", categoria: "Neurológica", deteccion: "Olvidos recientes y desorientación.", prevencion: "Actividad mental.", queHacer: "Rutinas en casa.", severidad: "Alta" },
-            { id: 143, nombre: "Gingivitis", categoria: "Bucal", deteccion: "Encía sangra al cepillar.", prevencion: "Hilo dental diario.", queHacer: "Limpieza profesional.", severidad: "Baja" },
-            { id: 150, nombre: "Hidrocefalia", categoria: "Neurológica", deteccion: "Cabeza crece en bebés.", prevencion: "Ácido fólico prenatal.", queHacer: "Válvula drenaje.", severidad: "Alta" }
+            // --- INFECCIOSAS ---
+            { id: 1, nombre: "Gripe (Influenza)", categoria: "Infecciosa", deteccion: "Fiebre alta repentina, dolores musculares y tos seca.", prevencion: "Vacunación anual y lavado de manos.", queHacer: "Reposo e hidratación profunda.", severidad: "Media" },
+            { id: 2, nombre: "Dengue", categoria: "Infecciosa", deteccion: "Dolor retro-ocular, fiebre alta y fatiga extrema.", prevencion: "Eliminar criaderos de mosquitos.", queHacer: "Hidratación masiva. Evitar aspirina/ibuprofeno.", severidad: "Alta" },
+            { id: 3, nombre: "Tuberculosis", categoria: "Infecciosa", deteccion: "Tos persistente >15 días, sudores nocturnos.", prevencion: "Vacuna BCG y ambientes ventilados.", queHacer: "Control estricto por salud pública.", severidad: "Alta" },
+            { id: 4, nombre: "Meningitis", categoria: "Infecciosa", deteccion: "Rigidez nucal, fiebre alta y fotofobia.", prevencion: "Vacunación específica.", queHacer: "Urgencia hospitalaria inmediata.", severidad: "Crítica" },
+            { id: 5, nombre: "Hepatitis A", categoria: "Infecciosa", deteccion: "Ictericia (ojos amarillos) y orina oscura.", prevencion: "Higiene alimentaria rigurosa.", queHacer: "Reposo y dieta sin grasas.", severidad: "Media" },
+            { id: 6, nombre: "Hepatitis B", categoria: "Infecciosa", deteccion: "Dolor abdominal derecho y fatiga progresiva.", prevencion: "Vacunación y protección en fluidos.", queHacer: "Seguimiento médico especializado.", severidad: "Crónica" },
+            { id: 7, nombre: "VIH / SIDA", categoria: "Infecciosa", deteccion: "Infecciones recurrentes y ganglios inflamados.", prevencion: "Uso de preservativo y material estéril.", queHacer: "Terapia antirretroviral de por vida.", severidad: "Crónica" },
+            { id: 8, nombre: "Cólera", categoria: "Infecciosa", deteccion: "Diarrea acuosa profusa y deshidratación súbita.", prevencion: "Consumo de agua potable.", queHacer: "Rehidratación urgente hospitalaria.", severidad: "Alta" },
+            { id: 9, nombre: "Malaria", categoria: "Infecciosa", deteccion: "Fiebre intermitente, escalofríos y sudoración.", prevencion: "Mosquiteros y repelentes.", queHacer: "Tratamiento médico inmediato.", severidad: "Alta" },
+            { id: 10, nombre: "Rabia", categoria: "Infecciosa", deteccion: "Hidrofobia, confusión y espasmos.", prevencion: "Vacunación de mascotas.", queHacer: "Vacunación post-mordedura urgente.", severidad: "Crítica" },
+            { id: 11, nombre: "Zika", categoria: "Infecciosa", deteccion: "Fiebre leve, sarpullido y conjuntivitis.", prevencion: "Control de mosquitos Aedes.", queHacer: "Reposo y control de fiebre.", severidad: "Media" },
+            { id: 12, nombre: "Chikungunya", categoria: "Infecciosa", deteccion: "Dolor articular debilitante y fiebre.", prevencion: "Eliminar agua estancada.", queHacer: "Paños fríos e hidratación.", severidad: "Media" },
+            { id: 13, nombre: "Fiebre Tifoidea", categoria: "Infecciosa", deteccion: "Fiebre prolongada y dolor abdominal.", prevencion: "Lavado de manos y buena cocción.", queHacer: "Antibioterapia bajo receta.", severidad: "Alta" },
+            { id: 14, nombre: "Tétanos", categoria: "Infecciosa", deteccion: "Rigidez muscular en mandíbula y cuello.", prevencion: "Vacuna y refuerzos cada 10 años.", queHacer: "Atención hospitalaria por herida.", severidad: "Crítica" },
+            { id: 15, nombre: "Varicela", categoria: "Infecciosa", deteccion: "Ampollas con picor y fiebre leve.", prevencion: "Vacunación infantil.", queHacer: "Evitar rascado e hidratar piel.", severidad: "Baja" },
+            { id: 16, nombre: "Sarampión", categoria: "Infecciosa", deteccion: "Manchas blancas en boca y sarpullido rojo.", prevencion: "Vacuna Triple Viral.", queHacer: "Aislamiento y control respiratorio.", severidad: "Alta" },
+            { id: 17, nombre: "Mononucleosis", categoria: "Infecciosa", deteccion: "Garganta inflamada, fatiga y ganglios.", prevencion: "No compartir utensilios personales.", queHacer: "Reposo prolongado.", severidad: "Media" },
+            { id: 18, nombre: "Sífilis", categoria: "Infecciosa", deteccion: "Chancro indoloro inicial.", prevencion: "Uso de preservativo.", queHacer: "Tratamiento médico urgente.", severidad: "Alta" },
+            { id: 19, nombre: "Gonorrea", categoria: "Infecciosa", deteccion: "Ardor al orinar y flujo amarillento.", prevencion: "Protección sexual.", queHacer: "Tratamiento de pareja simultáneo.", severidad: "Media" },
+            { id: 20, nombre: "Fiebre Amarilla", categoria: "Infecciosa", deteccion: "Fiebre, ictericia y sangrados.", prevencion: "Vacunación zonas de riesgo.", queHacer: "Soporte hospitalario.", severidad: "Alta" },
+
+            // --- CARDIOVASCULARES ---
+            { id: 21, nombre: "Hipertensión Arterial", categoria: "Cardiovascular", deteccion: "Asintomática o mareos/cefalea.", prevencion: "Bajo sodio y ejercicio.", queHacer: "Registro diario de presión.", severidad: "Crónica" },
+            { id: 22, nombre: "Infarto al Miocardio", categoria: "Cardiovascular", deteccion: "Dolor opresivo en pecho e irradiación.", prevencion: "Dieta sana y no fumar.", queHacer: "Llamar a emergencias inmediato.", severidad: "Crítica" },
+            { id: 23, nombre: "Arritmia", categoria: "Cardiovascular", deteccion: "Palpitaciones o aleteos en pecho.", prevencion: "Moderar cafeína y alcohol.", queHacer: "Evaluación cardiológica.", severidad: "Media" },
+            { id: 24, nombre: "Insuficiencia Cardíaca", categoria: "Cardiovascular", deteccion: "Falta de aire e hinchazón de pies.", prevencion: "Controlar presión y peso.", queHacer: "Restricción de líquidos.", severidad: "Alta" },
+            { id: 25, nombre: "Aneurisma", categoria: "Cardiovascular", deteccion: "Generalmente silencioso hasta ruptura.", prevencion: "Controlar tensión arterial.", queHacer: "Seguimiento médico especializado.", severidad: "Alta" },
+            { id: 26, nombre: "Aterosclerosis", categoria: "Cardiovascular", deteccion: "Dolor en piernas al caminar.", prevencion: "Dieta baja en grasas.", queHacer: "Control de colesterol.", severidad: "Crónica" },
+            { id: 27, nombre: "Pericarditis", categoria: "Cardiovascular", deteccion: "Dolor pecho que mejora al inclinarse.", prevencion: "Tratar infecciones virales.", queHacer: "Reposo absoluto.", severidad: "Media" },
+            { id: 28, nombre: "Várices", categoria: "Cardiovascular", deteccion: "Venas dilatadas y pesadez.", prevencion: "Medias de compresión.", queHacer: "Elevar piernas al descansar.", severidad: "Baja" },
+            { id: 29, nombre: "Angina de Pecho", categoria: "Cardiovascular", deteccion: "Dolor torácico transitorio al esfuerzo.", prevencion: "Vida activa y sin tabaco.", queHacer: "Reposo inmediato.", severidad: "Alta" },
+            { id: 30, nombre: "Endocarditis", categoria: "Cardiovascular", deteccion: "Fiebre y soplos nuevos.", prevencion: "Salud dental óptima.", queHacer: "Internación hospitalaria.", severidad: "Alta" },
+            { id: 31, nombre: "Trombosis Venosa", categoria: "Cardiovascular", deteccion: "Hinchazón y calor en una sola pierna.", prevencion: "Moverse en viajes largos.", queHacer: "Urgencia médica.", severidad: "Alta" },
+            { id: 32, nombre: "Valvulopatía", categoria: "Cardiovascular", deteccion: "Fatiga y ruidos cardíacos raros.", prevencion: "Control estreptococo infancia.", queHacer: "Control ecocardiográfico.", severidad: "Crónica" },
+            { id: 33, nombre: "Fibrilación Auricular", categoria: "Cardiovascular", deteccion: "Pulso totalmente irregular.", prevencion: "Evitar alcohol/apnea.", queHacer: "Control preventivo de ictus.", severidad: "Alta" },
+            { id: 34, nombre: "Cardiopatía Congénita", categoria: "Cardiovascular", deteccion: "Labios azules en bebés.", prevencion: "Control prenatal.", queHacer: "Cirugía especializada.", severidad: "Crónica" },
+            { id: 35, nombre: "Miocardiopatía", categoria: "Cardiovascular", deteccion: "Desmayos y fatiga crónica.", prevencion: "Evitar toxinas y alcohol.", queHacer: "Control de actividad física.", severidad: "Alta" },
+            { id: 36, nombre: "Hipertensión Pulmonar", categoria: "Cardiovascular", deteccion: "Falta de aire progresiva.", prevencion: "Evitar fármacos adelgazantes.", queHacer: "Oxigenoterapia.", severidad: "Alta" },
+            { id: 37, nombre: "Prolapso Mitral", categoria: "Cardiovascular", deteccion: "Pinchazos y palpitaciones.", prevencion: "Control periódico.", queHacer: "Estilo de vida saludable.", severidad: "Media" },
+            { id: 38, nombre: "Arteritis", categoria: "Cardiovascular", deteccion: "Dolor en sienes.", prevencion: "No conocida.", queHacer: "Consulta urgente oftalmo/reuma.", severidad: "Alta" },
+            { id: 39, nombre: "Síncope Vasovagal", categoria: "Cardiovascular", deteccion: "Desmayo tras dolor o miedo.", prevencion: "Hidratación constante.", queHacer: "Elevar piernas al marearse.", severidad: "Baja" },
+            { id: 40, nombre: "Edema Pulmonar", categoria: "Cardiovascular", deteccion: "Falta de aire crítica y tos rosa.", prevencion: "Controlar corazón/riñón.", queHacer: "Emergencia absoluta.", severidad: "Crítica" },
+
+            // --- METABÓLICAS ---
+            { id: 41, nombre: "Diabetes Tipo 1", categoria: "Metabólica", deteccion: "Sed y pérdida de peso rápida.", prevencion: "No aplicable.", queHacer: "Reemplazo hormonal insulina.", severidad: "Crónica" },
+            { id: 42, nombre: "Diabetes Tipo 2", categoria: "Metabólica", deteccion: "Visión borrosa y cansancio.", prevencion: "Dieta baja en azúcar.", queHacer: "Ejercicio y control de peso.", severidad: "Crónica" },
+            { id: 43, nombre: "Hipotiroidismo", categoria: "Metabólica", deteccion: "Frío, piel seca y fatiga.", prevencion: "Sal yodada.", queHacer: "Suplemento hormonal médico.", severidad: "Crónica" },
+            { id: 44, nombre: "Hipertiroidismo", categoria: "Metabólica", deteccion: "Nerviosismo y pérdida de peso.", prevencion: "No conocida.", queHacer: "Regulación endocrina.", severidad: "Crónica" },
+            { id: 45, nombre: "Dislipidemia", categoria: "Metabólica", deteccion: "Suele ser silenciosa.", prevencion: "Grasas vegetales.", queHacer: "Ejercicio aeróbico.", severidad: "Crónica" },
+            { id: 46, nombre: "Síndrome Metabólico", categoria: "Metabólica", deteccion: "Cintura ancha y presión alta.", prevencion: "Actividad física diaria.", queHacer: "Cambio de estilo de vida.", severidad: "Media" },
+            { id: 47, nombre: "Gota", categoria: "Articular", deteccion: "Dedo gordo rojo y doloroso.", prevencion: "Bajar carnes rojas.", queHacer: "Hidratación abundante.", severidad: "Media" },
+            { id: 48, nombre: "Bocio", categoria: "Metabólica", deteccion: "Hinchazón en base de cuello.", prevencion: "Consumo de yodo.", queHacer: "Evaluación tiroidea.", severidad: "Media" },
+            { id: 49, nombre: "Cushing", categoria: "Metabólica", deteccion: "Cara redondeada y grasa nuca.", prevencion: "Control de corticoides.", queHacer: "Cirugía o manejo endocrino.", severidad: "Alta" },
+            { id: 50, nombre: "Addison", categoria: "Metabólica", deteccion: "Piel oscura y debilidad.", prevencion: "No conocida.", queHacer: "Soporte hormonal.", severidad: "Alta" },
+            { id: 51, nombre: "Hipoglucemia", categoria: "Metabólica", deteccion: "Sudor frío y confusión.", prevencion: "Horarios de comida.", queHacer: "Ingesta rápida azúcar.", severidad: "Alta" },
+            { id: 52, nombre: "Obesidad Mórbida", categoria: "Metabólica", deteccion: "IMC > 40.", prevencion: "Hábitos desde infancia.", queHacer: "Cirugía bariátrica o plan médico.", severidad: "Alta" },
+            { id: 53, nombre: "Galactosemia", categoria: "Metabólica", deteccion: "Vómito y rechazo leche.", prevencion: "Tamizaje neonatal.", queHacer: "Dieta sin galactosa.", severidad: "Alta" },
+            { id: 54, nombre: "Osteomalacia", categoria: "Metabólica", deteccion: "Dolor óseo y debilidad.", prevencion: "Vitamina D y sol.", queHacer: "Suplementación.", severidad: "Media" },
+            { id: 55, nombre: "Hemocromatosis", categoria: "Metabólica", deteccion: "Piel gris y dolor hígado.", prevencion: "Genético.", queHacer: "Sangrías periódicas.", severidad: "Crónica" },
+            { id: 56, nombre: "Hiperparatiroidismo", categoria: "Metabólica", deteccion: "Cálculos renales frecuentes.", prevencion: "No conocida.", queHacer: "Control de calcio sérico.", severidad: "Crónica" },
+            { id: 57, nombre: "Defecto Fenilalanina", categoria: "Metabólica", deteccion: "Olor a moho en orina.", prevencion: "Tamizaje talón.", queHacer: "Dieta restrictiva.", severidad: "Crónica" },
+            { id: 58, nombre: "Xantomatosis", categoria: "Metabólica", deteccion: "Bultos de grasa en piel.", prevencion: "Control lípidos.", queHacer: "Dieta hipolipemiante.", severidad: "Media" },
+            { id: 59, nombre: "Porfiria", categoria: "Metabólica", deteccion: "Orina roja y dolor abdomen.", prevencion: "Evitar gatillos sol/fármacos.", queHacer: "Protección solar total.", severidad: "Crónica" },
+            { id: 60, nombre: "Acromegalia", categoria: "Metabólica", deteccion: "Manos y pies que crecen.", prevencion: "No conocida.", queHacer: "Cirugía hipófisis.", severidad: "Alta" },
+
+            // --- RESPIRATORIAS ---
+            { id: 61, nombre: "Asma Bronquial", categoria: "Respiratoria", deteccion: "Pitos al respirar y tos.", prevencion: "Evitar ácaros y humo.", queHacer: "Inhaladores de control.", severidad: "Crónica" },
+            { id: 62, nombre: "EPOC", categoria: "Respiratoria", deteccion: "Tos de fumador y fatiga.", prevencion: "Cero tabaco.", queHacer: "Rehabilitación pulmonar.", severidad: "Crónica" },
+            { id: 63, nombre: "Neumonía", categoria: "Respiratoria", deteccion: "Fiebre y dolor al respirar.", prevencion: "Vacunas antineumo.", queHacer: "Antibióticos bajo receta.", severidad: "Alta" },
+            { id: 64, nombre: "Bronquitis Aguda", categoria: "Respiratoria", deteccion: "Tos persistente con flema.", prevencion: "Evitar aire frío/polvo.", queHacer: "Vahos e hidratación.", severidad: "Media" },
+            { id: 65, nombre: "Sinusitis", categoria: "Respiratoria", deteccion: "Dolor facial y moco verde.", prevencion: "Tratar rinitis.", queHacer: "Lavados nasales.", severidad: "Baja" },
+            { id: 66, nombre: "Apnea del Sueño", categoria: "Respiratoria", deteccion: "Ronquido y parada aire.", prevencion: "Bajar peso.", queHacer: "Uso de CPAP.", severidad: "Media" },
+            { id: 67, nombre: "Enfisema", categoria: "Respiratoria", deteccion: "Dificultad exhalar aire.", prevencion: "Protección ambiental.", queHacer: "Ejercicios respiratorios.", severidad: "Crónica" },
+            { id: 68, nombre: "Bronquiolitis", categoria: "Respiratoria", deteccion: "Silbidos en lactantes.", prevencion: "Higiene manos.", queHacer: "Vigilancia respiratoria.", severidad: "Alta" },
+            { id: 69, nombre: "Derrame Pleural", categoria: "Respiratoria", deteccion: "Puntada de costado.", prevencion: "Controlar neumonía.", queHacer: "Drenaje hospitalario.", severidad: "Alta" },
+            { id: 70, nombre: "Embolia Pulmonar", categoria: "Respiratoria", deteccion: "Falta aire súbita.", prevencion: "Moverse tras cirugía.", queHacer: "Urgencia inmediata.", severidad: "Crítica" },
+            { id: 71, nombre: "Sarcoidosis", categoria: "Respiratoria", deteccion: "Tos seca y fatiga.", prevencion: "No conocida.", queHacer: "Control neumológico.", severidad: "Crónica" },
+            { id: 72, nombre: "Faringitis", categoria: "Respiratoria", deteccion: "Dolor al tragar saliva.", prevencion: "No compartir vasos.", queHacer: "Gárgaras tibias.", severidad: "Baja" },
+            { id: 73, nombre: "Laringitis", categoria: "Respiratoria", deteccion: "Voz ronca y tos perruna.", prevencion: "No forzar voz.", queHacer: "Reposo vocal.", severidad: "Baja" },
+            { id: 74, nombre: "Rinitis Alérgica", categoria: "Respiratoria", deteccion: "Estornudos y picor.", prevencion: "Limpieza ácaros.", queHacer: "Higiene nasal.", severidad: "Baja" },
+            { id: 75, nombre: "Pleuresía", categoria: "Respiratoria", deteccion: "Dolor agudo al toser.", prevencion: "Tratar gripes.", queHacer: "Calor local.", severidad: "Media" },
+            { id: 76, nombre: "Fibrosis Pulmonar", categoria: "Respiratoria", deteccion: "Dedos palillo tambor.", prevencion: "Mascarilla en trabajo.", queHacer: "Oxigenoterapia.", severidad: "Alta" },
+            { id: 77, nombre: "Crup Laringeo", categoria: "Respiratoria", deteccion: "Estridor nocturno niños.", prevencion: "Vacunas al día.", queHacer: "Ambiente húmedo.", severidad: "Media" },
+            { id: 78, nombre: "Aspergilosis", categoria: "Respiratoria", deteccion: "Moco con sangre.", prevencion: "Evitar moho/humedad.", queHacer: "Tratamiento antifúngico.", severidad: "Alta" },
+            { id: 79, nombre: "Bronquiectasias", categoria: "Respiratoria", deteccion: "Flema excesiva diaria.", prevencion: "Tratar tos infancia.", queHacer: "Fisioterapia tórax.", severidad: "Crónica" },
+            { id: 80, nombre: "Edema Glotis", categoria: "Respiratoria", deteccion: "No pasa aire cuello.", prevencion: "Control alergias.", queHacer: "Emergencia total.", severidad: "Crítica" },
+
+            // --- DIGESTIVAS ---
+            { id: 81, nombre: "Gastritis", categoria: "Digestiva", deteccion: "Ardor en boca estómago.", prevencion: "No picantes.", queHacer: "Fraccionar comidas.", severidad: "Media" },
+            { id: 82, nombre: "Reflujo (ERGE)", categoria: "Digestiva", deteccion: "Acidez tras comer.", prevencion: "Cenas ligeras.", queHacer: "No acostarse pronto.", severidad: "Media" },
+            { id: 83, nombre: "Úlcera Gástrica", categoria: "Digestiva", deteccion: "Dolor estómago vacío.", prevencion: "Evitar aspirinas.", queHacer: "Test H. Pylori.", severidad: "Media" },
+            { id: 84, nombre: "Celiaquía", categoria: "Digestiva", deteccion: "Diarrea con gluten.", prevencion: "Genético.", queHacer: "Dieta sin gluten.", severidad: "Crónica" },
+            { id: 85, nombre: "Colon Irritable", categoria: "Digestiva", deteccion: "Hinchazón y gases.", prevencion: "Gestión estrés.", queHacer: "Dieta FODMAP.", severidad: "Media" },
+            { id: 86, nombre: "Crohn", categoria: "Digestiva", deteccion: "Dolor fuerte abdomen.", prevencion: "No conocida.", queHacer: "Seguimiento gastro.", severidad: "Crónica" },
+            { id: 87, nombre: "Colitis Ulcerosa", categoria: "Digestiva", deteccion: "Diarrea con sangre.", prevencion: "No conocida.", queHacer: "Manejo hospitalario.", severidad: "Crónica" },
+            { id: 88, nombre: "Cálculos Biliares", categoria: "Digestiva", deteccion: "Dolor derecho espalda.", prevencion: "Bajar grasas.", queHacer: "Cirugía vesícula.", severidad: "Alta" },
+            { id: 89, nombre: "Cirrosis Hepática", categoria: "Digestiva", deteccion: "Hinchazón abdominal.", prevencion: "Cero alcohol.", queHacer: "Control hepático.", severidad: "Alta" },
+            { id: 90, nombre: "Hígado Graso", categoria: "Digestiva", deteccion: "Fatiga y pesadez.", prevencion: "Bajar azúcar.", queHacer: "Caminar diario.", severidad: "Crónica" },
+            { id: 91, nombre: "Hemorroides", categoria: "Digestiva", deteccion: "Sangre al evacuar.", prevencion: "Comer fibra.", queHacer: "Baños asiento.", severidad: "Baja" },
+            { id: 92, nombre: "Estreñimiento", categoria: "Digestiva", deteccion: "Heces duras.", prevencion: "Mucha agua.", queHacer: "Hábito horario.", severidad: "Baja" },
+            { id: 93, nombre: "Diverticulitis", categoria: "Digestiva", deteccion: "Dolor lado izquierdo.", prevencion: "Fibra siempre.", queHacer: "Dieta líquida.", severidad: "Alta" },
+            { id: 94, nombre: "Pancreatitis", categoria: "Digestiva", deteccion: "Dolor faja espalda.", prevencion: "No alcohol.", queHacer: "Ayuno hospitalario.", severidad: "Crítica" },
+            { id: 95, nombre: "Gastroenteritis", categoria: "Digestiva", deteccion: "Vómito y diarrea.", prevencion: "Lavar manos.", queHacer: "Suero oral.", severidad: "Media" },
+            { id: 96, nombre: "Intolerancia Lactosa", categoria: "Digestiva", deteccion: "Gases con leche.", prevencion: "No conocida.", queHacer: "Evitar lácteos.", severidad: "Baja" },
+            { id: 97, nombre: "Hernia Hiato", categoria: "Digestiva", deteccion: "Ardor al tumbarse.", prevencion: "No sobrepeso.", queHacer: "Elevar cabecera.", severidad: "Media" },
+            { id: 98, nombre: "Fisura Anal", categoria: "Digestiva", deteccion: "Dolor agudo evacuar.", prevencion: "Fibra y agua.", queHacer: "Cremas locales.", severidad: "Baja" },
+            { id: 99, nombre: "Parásitos (Giardia)", categoria: "Digestiva", deteccion: "Heces con grasa.", prevencion: "Agua potable.", queHacer: "Higiene extrema.", severidad: "Baja" },
+            { id: 100, nombre: "Colecistitis", categoria: "Digestiva", deteccion: "Fiebre y dolor vesícula.", prevencion: "Controlar piedras.", queHacer: "Cirugía urgente.", severidad: "Alta" },
+
+            // --- MENTALES ---
+            { id: 101, nombre: "Depresión", categoria: "Mental", deteccion: "Tristeza profunda.", prevencion: "Red de apoyo.", queHacer: "Psicoterapia.", severidad: "Alta" },
+            { id: 102, nombre: "Ansiedad", categoria: "Mental", deteccion: "Palpitaciones y miedo.", prevencion: "Mindfulness.", queHacer: "Respiración.", severidad: "Media" },
+            { id: 103, nombre: "TDAH", categoria: "Mental", deteccion: "Falta atención niños.", prevencion: "Detección precoz.", queHacer: "Terapia conducta.", severidad: "Crónica" },
+            { id: 104, nombre: "Bipolaridad", categoria: "Mental", deteccion: "Euforia y pena.", prevencion: "Rutinas.", queHacer: "Psiquiatría.", severidad: "Alta" },
+            { id: 105, nombre: "Esquizofrenia", categoria: "Mental", deteccion: "Oír voces.", prevencion: "Sin drogas.", queHacer: "Control estable.", severidad: "Alta" },
+            { id: 106, nombre: "Ataque Pánico", categoria: "Mental", deteccion: "Siento que muero.", prevencion: "Relajación.", queHacer: "Terapia cognitivo.", severidad: "Media" },
+            { id: 107, nombre: "Insomnio", categoria: "Mental", deteccion: "No dormir de noche.", prevencion: "Cero pantallas.", queHacer: "Higiene sueño.", severidad: "Media" },
+            { id: 108, nombre: "TOC", categoria: "Mental", deteccion: "Lavado manos obsesivo.", prevencion: "Gestión ansiedad.", queHacer: "Terapia exposición.", severidad: "Crónica" },
+            { id: 109, nombre: "Anorexia", categoria: "Mental", deteccion: "Miedo a engordar.", prevencion: "Autoestima.", queHacer: "Ingreso médico.", severidad: "Alta" },
+            { id: 110, nombre: "Bulimia", categoria: "Mental", deteccion: "Atracones y purgas.", prevencion: "Salud emocional.", queHacer: "Terapia familiar.", severidad: "Alta" },
+            { id: 111, nombre: "Estrés Postraumático", categoria: "Mental", deteccion: "Flashbacks trauma.", prevencion: "Apoyo tras crisis.", queHacer: "Terapia EMDR.", severidad: "Alta" },
+            { id: 112, nombre: "Fobia Social", categoria: "Mental", deteccion: "Miedo a gente.", prevencion: "Socializar.", queHacer: "Habilidades soc.", severidad: "Media" },
+            { id: 113, nombre: "Autismo (TEA)", categoria: "Mental", deteccion: "No mirar a ojos.", prevencion: "Genético.", queHacer: "Intervención temp.", severidad: "Crónica" },
+            { id: 114, nombre: "Dismorfia", categoria: "Mental", deteccion: "Obsesión por defecto.", prevencion: "Educación crítica.", queHacer: "Psicología.", severidad: "Media" },
+            { id: 115, nombre: "Demencia", categoria: "Mental", deteccion: "Confusión mental.", prevencion: "Leer y jugar.", queHacer: "Entorno seguro.", severidad: "Alta" },
+
+            // --- NEUROLÓGICAS ---
+            { id: 116, nombre: "Alzheimer", categoria: "Neurológica", deteccion: "Olvidos recientes.", prevencion: "Gimnasia mental.", queHacer: "Estimulación.", severidad: "Alta" },
+            { id: 117, nombre: "Parkinson", categoria: "Neurológica", deteccion: "Temblores reposo.", prevencion: "Ejercicio físico.", queHacer: "Fisioterapia.", severidad: "Alta" },
+            { id: 118, nombre: "Migraña", categoria: "Neurológica", deteccion: "Dolor pulsátil ojo.", prevencion: "Evitar quesos/vino.", queHacer: "Habitación oscura.", severidad: "Media" },
+            { id: 119, nombre: "Epilepsia", categoria: "Neurológica", deteccion: "Convulsiones.", prevencion: "Dormir bien.", queHacer: "Poner de lado.", severidad: "Crónica" },
+            { id: 120, nombre: "Ictus", categoria: "Neurológica", deteccion: "Brazo sin fuerza.", prevencion: "Presión baja.", queHacer: "Emergencia total.", severidad: "Crítica" },
+            { id: 121, nombre: "Esclerosis Múltiple", categoria: "Neurológica", deteccion: "Hormigueo piernas.", prevencion: "No conocida.", queHacer: "Rehabilitación.", severidad: "Crónica" },
+            { id: 122, nombre: "Neuropatía", categoria: "Neurológica", deteccion: "Pies quemazón.", prevencion: "Control azúcar.", queHacer: "Cuidado pies.", severidad: "Crónica" },
+            { id: 123, nombre: "Vértigo", categoria: "Neurológica", deteccion: "Todo da vueltas.", prevencion: "No mover cabeza.", queHacer: "Maniobras.", severidad: "Baja" },
+            { id: 124, nombre: "Neuralgia Trigémino", categoria: "Neurológica", deteccion: "Dolor rayo cara.", prevencion: "Evitar frío.", queHacer: "Tratamiento espec.", severidad: "Alta" },
+            { id: 125, nombre: "Mielitis", categoria: "Neurológica", deteccion: "Parálisis súbita.", prevencion: "Vacunación.", queHacer: "Hospitalización.", severidad: "Alta" },
+            { id: 126, nombre: "Ataxia", categoria: "Neurológica", deteccion: "Caminar borracho.", prevencion: "No alcohol.", queHacer: "Ejercicios equilibrio.", severidad: "Media" },
+            { id: 127, nombre: "Hidrocefalia", categoria: "Neurológica", deteccion: "Cabeza crece bebé.", prevencion: "Ácido fólico.", queHacer: "Cirugía.", severidad: "Alta" },
+            { id: 128, nombre: "Encefalitis", categoria: "Neurológica", deteccion: "Fiebre y confusión.", prevencion: "Evitar mosquitos.", queHacer: "Urgencia médica.", severidad: "Alta" },
+            { id: 129, nombre: "Cefalea Tensional", categoria: "Neurológica", deteccion: "Presión en sienes.", prevencion: "Postura y relax.", queHacer: "Calor cuello.", severidad: "Baja" },
+            { id: 130, nombre: "Corea", categoria: "Neurológica", deteccion: "Movimientos raros.", prevencion: "Genético.", queHacer: "Soporte neurológico.", severidad: "Crónica" },
+
+            // --- DERMATOLÓGICAS, ARTICULARES, OTRAS ---
+            { id: 131, nombre: "Dermatitis", categoria: "Dermatológica", deteccion: "Piel roja picor.", prevencion: "Jabón neutro.", queHacer: "Hidratar piel.", severidad: "Baja" },
+            { id: 132, nombre: "Psoriasis", categoria: "Dermatológica", deteccion: "Escamas blancas.", prevencion: "Control estrés.", queHacer: "Exposición sol.", severidad: "Crónica" },
+            { id: 133, nombre: "Vitíligo", categoria: "Dermatológica", deteccion: "Manchas blancas.", prevencion: "No conocida.", queHacer: "Protección solar.", severidad: "Baja" },
+            { id: 134, nombre: "Urticaria", categoria: "Dermatológica", deteccion: "Ronchas rojas.", prevencion: "Sin alérgenos.", queHacer: "Hielo local.", severidad: "Baja" },
+            { id: 135, nombre: "Acné", categoria: "Dermatológica", deteccion: "Granos cara.", prevencion: "Limpieza suave.", queHacer: "No apretar.", severidad: "Baja" },
+            { id: 136, nombre: "Artritis Reumatoide", categoria: "Articular", deteccion: "Manos rígidas.", prevencion: "Sin tabaco.", queHacer: "Calor mañana.", severidad: "Crónica" },
+            { id: 137, nombre: "Osteoporosis", categoria: "Ósea", deteccion: "Hueso se rompe.", prevencion: "Calcio y Sol.", queHacer: "Caminar diario.", severidad: "Crónica" },
+            { id: 138, nombre: "Gingivitis", categoria: "Bucal", deteccion: "Encía sangra.", prevencion: "Hilo dental.", queHacer: "Limpieza dentista.", severidad: "Baja" },
+            { id: 139, nombre: "Otitis", categoria: "Auditiva", deteccion: "Dolor oído.", prevencion: "Secar oídos.", queHacer: "No usar bastones.", severidad: "Baja" },
+            { id: 140, nombre: "Glaucoma", categoria: "Ocular", deteccion: "Pierdo visión lado.", prevencion: "Control ocular.", queHacer: "Gotas diarias.", severidad: "Crónica" },
+            { id: 141, nombre: "Cataratas", categoria: "Ocular", deteccion: "Veo con nube.", prevencion: "Gafas sol.", queHacer: "Cirugía.", severidad: "Media" },
+            { id: 142, nombre: "Conjuntivitis", categoria: "Ocular", deteccion: "Ojo rojo legaña.", prevencion: "Lavar manos.", queHacer: "Suero frío.", severidad: "Baja" },
+            { id: 143, nombre: "Lupus", categoria: "Articular", deteccion: "Mancha mariposa.", prevencion: "Sombra.", queHacer: "Control reuma.", severidad: "Crónica" },
+            { id: 144, nombre: "Sarna", categoria: "Dermatológica", deteccion: "Pica de noche.", prevencion: "No ropa ajena.", queHacer: "Lavar todo calor.", severidad: "Baja" },
+            { id: 145, nombre: "Cistitis", categoria: "Urinaria", deteccion: "Ardor al orinar.", prevencion: "Arándanos.", queHacer: "Mucha agua.", severidad: "Baja" },
+            { id: 146, nombre: "Cálculo Renal", categoria: "Urinaria", deteccion: "Dolor espalda riñón.", prevencion: "Beber agua.", queHacer: "Urgencia calor.", severidad: "Alta" },
+            { id: 147, nombre: "Juanetes", categoria: "Ósea", deteccion: "Bulto dedo pie.", prevencion: "Calzado ancho.", queHacer: "Ortopedia.", severidad: "Baja" },
+            { id: 148, nombre: "Hedor Bucal", categoria: "Bucal", deteccion: "Mal aliento.", prevencion: "Limpiar lengua.", queHacer: "Control dental.", severidad: "Baja" },
+            { id: 149, nombre: "Cáncer Mama", categoria: "Oncológica", deteccion: "Bulto duro.", prevencion: "Ecografía.", queHacer: "Especialista onco.", severidad: "Alta" },
+            { id: 150, nombre: "Anemia", categoria: "Nutricional", deteccion: "Palidez y mareo.", prevencion: "Hierro dieta.", queHacer: "Test sangre.", severidad: "Media" }
         ];
 
-        // Se completa el array dinámicamente para simular los 150 si faltaran IDs
-        const ALL_DISEASES = [...ENFERMEDADES];
-        for(let i=151; i<=150; i++) { /* Lógica de relleno si fuera necesario */ }
-
         const HABITOS = [
-            { id: 1, titulo: "Hidratación", desc: "El agua regula la presión.", detalles: "Beber 2L diarios mejora el drenaje linfático renal y previene migrañas." },
-            { id: 2, titulo: "Nutrición", desc: "Regla 80/20: Alimentos Reales.", detalles: "La fibra vegetal alimenta tu microbiota, esencial para el sistema inmune." },
-            { id: 3, titulo: "Descanso", desc: "Reparación sistémica nocturna.", detalles: "Dormir menos de 7 horas triplica el riesgo de infecciones virales." },
-            { id: 4, titulo: "Movimiento", desc: "Músculo como medicina.", detalles: "150 min de ejercicio moderado reduce riesgo de infarto en un 30%." }
+            { id: 1, titulo: "Hidratación", desc: "El agua regula la presión y lubrica.", icono: <Icon name="droplets" color="#3b82f6" />, detalles: "El 70% de tu cerebro es agua. Beber 2L diarios mejora el drenaje linfático renal y previene migrañas." },
+            { id: 2, titulo: "Nutrición", desc: "Regla 80/20: Alimentos Reales.", icono: <Icon name="apple" color="#ef4444" />, detalles: "La fibra vegetal alimenta tu microbiota, esencial para el sistema inmune. Evita azúcares refinados para proteger tu páncreas." },
+            { id: 3, titulo: "Descanso", desc: "Reparación sistémica nocturna.", icono: <Icon name="moon" color="#8b5cf6" />, detalles: "Dormir menos de 7 horas triplica el riesgo de infecciones. La oscuridad total permite producir melatonina, un potente antioxidante." },
+            { id: 4, titulo: "Movimiento", desc: "El músculo es medicina metabólica.", icono: <Icon name="zap" color="#f97316" />, detalles: "150 min de ejercicio moderado reduce riesgo de infarto en un 30%. El entrenamiento de fuerza mantiene la densidad ósea." }
         ];
 
         const App = () => {
-            const [view, setView] = useState('home');
+            const [view, setView] = useState('home'); 
             const [searchQuery, setSearchQuery] = useState('');
             const [selectedCategory, setSelectedCategory] = useState('Todas');
             const [selectedDisease, setSelectedDisease] = useState(null);
@@ -93,11 +277,13 @@
             const [peso, setPeso] = useState('');
             const [altura, setAltura] = useState('');
             const [resultadoIMC, setResultadoIMC] = useState(null);
+            
+            const categoryScrollRef = useRef(null);
 
-            const categorias = ['Todas', 'Infecciosa', 'Cardiovascular', 'Metabólica', 'Respiratoria', 'Digestiva', 'Mental', 'Neurológica', 'Dermatológica', 'Bucal', 'Urinaria', 'Oncológica'];
+            const categorias = ['Todas', 'Infecciosa', 'Metabólica', 'Cardiovascular', 'Respiratoria', 'Digestiva', 'Mental', 'Neurológica', 'Dermatológica', 'Ósea', 'Articular', 'Auditiva', 'Bucal', 'Ocular', 'Urinaria', 'Oncológica', 'Nutricional'];
 
             const filteredDiseases = useMemo(() => {
-                return ALL_DISEASES.filter(d => {
+                return ENFERMEDADES.filter(d => {
                     const matchesSearch = d.nombre.toLowerCase().includes(searchQuery.toLowerCase()) || 
                                          d.deteccion.toLowerCase().includes(searchQuery.toLowerCase());
                     const matchesCategory = selectedCategory === 'Todas' || d.categoria === selectedCategory;
@@ -105,94 +291,131 @@
                 });
             }, [searchQuery, selectedCategory]);
 
+            const scrollCategories = (direction) => {
+                if (categoryScrollRef.current) {
+                    const scrollAmount = 200;
+                    categoryScrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+                }
+            };
+
             const calcularIMC = () => {
                 if (peso > 0 && altura > 0) {
                     const altMetros = altura / 100;
-                    const val = (peso / (altMetros * altMetros)).toFixed(1);
-                    let est = val < 18.5 ? "Bajo peso" : val < 25 ? "Normal" : val < 30 ? "Sobrepeso" : "Obesidad";
-                    let rec = val < 25 ? "¡Sigue así! Mantén tu dieta y ejercicio." : "Se recomienda ajustar dieta y aumentar actividad física.";
-                    setResultadoIMC({ valor: val, estado: est, recomendacion: rec });
+                    const imcVal = (peso / (altMetros * altMetros)).toFixed(1);
+                    let est = "";
+                    let rec = "";
+                    if (imcVal < 18.5) {
+                        est = "Bajo peso";
+                        rec = "Aumenta el consumo de grasas saludables y proteínas. Realiza entrenamiento de fuerza.";
+                    } else if (imcVal < 25) {
+                        est = "Normal";
+                        rec = "¡Excelente! Mantén tu dieta rica en fibra y actividad física regular.";
+                    } else if (imcVal < 30) {
+                        est = "Sobrepeso";
+                        rec = "Reduce harinas refinadas y aumenta el ejercicio cardiovascular diario.";
+                    } else {
+                        est = "Obesidad";
+                        rec = "Consulta médica sugerida. Prioriza ejercicios de bajo impacto para proteger articulaciones.";
+                    }
+                    setResultadoIMC({ valor: imcVal, estado: est, recomendacion: rec });
                 }
             };
 
             return (
-                <div className="max-w-md mx-auto min-h-screen bg-slate-50 pb-20 relative shadow-2xl overflow-hidden border-x border-slate-200">
-                    {/* Header */}
-                    <header className="bg-white sticky top-0 z-30 px-6 py-4 border-b flex justify-between items-center shadow-sm">
-                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('home')}>
-                            <div className="bg-blue-600 p-1 rounded-lg">
-                                <Icon name="heart" color="white" size={18} fill="white" />
+                <div className="min-h-screen bg-slate-50 pb-24 max-w-lg mx-auto shadow-xl bg-white border-x">
+                    <header className="bg-white sticky top-0 z-30 px-6 py-4 border-b border-slate-100 flex justify-between items-center shadow-sm glass-effect">
+                        <div className="flex items-center gap-2 cursor-pointer transition-transform active:scale-95" onClick={() => setView('home')}>
+                            <div className="bg-blue-600 p-1.5 rounded-lg shadow-lg">
+                                <Icon name="heart" color="white" fill="white" size={18} />
                             </div>
-                            <h1 className="text-lg font-black text-slate-800">Salud <span className="text-blue-600">UCN</span></h1>
+                            <h1 className="text-lg font-black text-slate-800 tracking-tight">Salud <span className="text-blue-600 font-black">UCN</span></h1>
                         </div>
-                        <span className="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded-full text-slate-400">Portal UCN</span>
+                        <div className="text-[10px] font-black text-slate-400 bg-slate-100 px-3 py-1 rounded-full uppercase">150 Casos</div>
                     </header>
 
-                    {/* Vistas */}
-                    <main className="p-6">
+                    <main className="px-6 pt-6 animate-fade">
                         {view === 'home' && (
                             <div className="space-y-6">
-                                <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
-                                    <h2 className="text-2xl font-bold mb-2">Enciclopedia Vital</h2>
-                                    <p className="opacity-60 text-xs mb-6">Consulta 150 condiciones médicas.</p>
-                                    <div className="relative">
-                                        <div className="absolute left-3 top-3 text-slate-400"><Icon name="search" size={18}/></div>
-                                        <input 
-                                            className="w-full bg-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none"
-                                            placeholder="Busca un síntoma..."
-                                            onFocus={() => setView('diseases')}
-                                        />
+                                <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+                                    <div className="relative z-10">
+                                        <h2 className="text-2xl font-bold mb-1 tracking-tight">Salud UCN</h2>
+                                        <p className="opacity-70 mb-6 text-xs font-medium">Enciclopedia médica universitaria con 150 condiciones.</p>
+                                        <div className="relative">
+                                            <div className="absolute left-3 top-3.5"><Icon name="search" color="#94a3b8" size={16} /></div>
+                                            <input 
+                                                type="text" placeholder="¿Qué síntoma buscas?..."
+                                                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500"
+                                                onFocus={() => setView('diseases')}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
+                                    <div className="absolute top-[-20%] right-[-10%] w-48 h-48 bg-blue-600/20 rounded-full blur-3xl"></div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div onClick={() => setView('diseases')} className="bg-white p-6 rounded-3xl border flex flex-col items-center cursor-pointer active:scale-95 transition-all">
-                                        <div className="bg-red-50 p-3 rounded-2xl mb-2 text-red-600"><Icon name="book" /></div>
-                                        <span className="font-bold text-xs">Directorio</span>
-                                    </div>
-                                    <div onClick={() => setView('tools')} className="bg-white p-6 rounded-3xl border flex flex-col items-center cursor-pointer active:scale-95 transition-all">
-                                        <div className="bg-blue-50 p-3 rounded-2xl mb-2 text-blue-600"><Icon name="calc" /></div>
-                                        <span className="font-bold text-xs">IMC</span>
-                                    </div>
+                                    <button onClick={() => setView('diseases')} className="p-6 bg-white rounded-3xl border border-slate-100 flex flex-col items-center text-center shadow-sm hover:border-blue-300 active:scale-95 transition-all">
+                                        <div className="bg-red-50 p-3 rounded-2xl mb-3"><Icon name="stethoscope" color="#ef4444" size={24} /></div>
+                                        <span className="font-bold text-slate-800 text-sm">Directorio Médico</span>
+                                    </button>
+                                    <button onClick={() => setView('tools')} className="p-6 bg-white rounded-3xl border border-slate-100 flex flex-col items-center text-center shadow-sm hover:border-blue-300 active:scale-95 transition-all">
+                                        <div className="bg-blue-50 p-3 rounded-2xl mb-3"><Icon name="calculator" color="#3b82f6" size={24} /></div>
+                                        <span className="font-bold text-slate-800 text-sm">Calculadora IMC</span>
+                                    </button>
                                 </div>
+
+                                <section>
+                                    <h3 className="font-bold text-slate-800 mb-4 px-1">Pilares de Salud</h3>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        {HABITOS.map(h => (
+                                            <div key={h.id} onClick={() => setSelectedHabit(h)} className="p-4 bg-white rounded-2xl border border-slate-100 flex items-center gap-3 cursor-pointer hover:border-blue-200 active:scale-95 transition-all shadow-sm">
+                                                <div className="p-2 bg-slate-50 rounded-lg shrink-0">{h.icono}</div>
+                                                <span className="text-[10px] font-black uppercase text-slate-600 leading-tight">{h.titulo}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
                             </div>
                         )}
 
                         {view === 'diseases' && (
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold">Listado ({filteredDiseases.length})</h2>
-                                    <button onClick={() => setView('home')} className="text-blue-600 text-xs font-bold">Atrás</button>
+                            <div className="space-y-4 pb-24">
+                                <div className="flex justify-between items-center mb-2">
+                                    <h2 className="text-xl font-bold tracking-tight">Fichas Clínicas ({filteredDiseases.length})</h2>
+                                    <button onClick={() => setView('home')} className="text-sm text-blue-600 font-bold">Atrás</button>
                                 </div>
-                                <input 
-                                    className="w-full bg-white border p-3 rounded-xl text-sm"
-                                    placeholder="Filtra por nombre..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-                                    {categorias.map(c => (
-                                        <button 
-                                            key={c}
-                                            onClick={() => setSelectedCategory(c)}
-                                            className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ${selectedCategory === c ? 'bg-blue-600 text-white' : 'bg-slate-200'}`}
-                                        >
-                                            {c}
-                                        </button>
-                                    ))}
+                                
+                                <div className="relative">
+                                    <div className="absolute left-3 top-3.5"><Icon name="search" color="#94a3b8" size={16} /></div>
+                                    <input 
+                                        type="text" placeholder="Fiebre, tos, dolor..."
+                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500 shadow-inner"
+                                        value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
-                                <div className="space-y-3">
+
+                                <div className="relative flex items-center group">
+                                    <button onClick={() => scrollCategories('left')} className="absolute left-0 z-10 bg-white/90 p-1 rounded-full shadow-md border border-slate-100 transition-opacity active:scale-90"><Icon name="chevronLeft" size={16} /></button>
+                                    <div ref={categoryScrollRef} className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1 w-full" style={{ scrollbarWidth: 'none' }}>
+                                        {categorias.map(cat => (
+                                            <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all ${selectedCategory === cat ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-200 text-slate-600'}`}>{cat}</button>
+                                        ))}
+                                    </div>
+                                    <button onClick={() => scrollCategories('right')} className="absolute right-0 z-10 bg-white/90 p-1 rounded-full shadow-md border border-slate-100 transition-opacity active:scale-90"><Icon name="chevronRight" size={16} /></button>
+                                </div>
+
+                                <div className="grid gap-3">
                                     {filteredDiseases.map(d => (
-                                        <div key={d.id} onClick={() => setSelectedDisease(d)} className="bg-white p-4 rounded-2xl border flex justify-between items-center cursor-pointer active:bg-blue-50">
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2 bg-slate-50 rounded-lg"><Icon name="shield" size={16} color="#3b82f6"/></div>
+                                        <div key={d.id} onClick={() => setSelectedDisease(d)} className="bg-white p-4 rounded-2xl border border-slate-100 flex items-center justify-between group cursor-pointer active:scale-[0.98] hover:border-blue-300 transition-all shadow-sm">
+                                            <div className="flex items-center gap-4">
+                                                <div className={`p-2.5 rounded-xl ${d.severidad === 'Crítica' ? 'bg-black text-white' : d.severidad === 'Alta' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                                                    <Icon name="thermometer" size={18} color="currentColor" />
+                                                </div>
                                                 <div>
-                                                    <h3 className="font-bold text-sm">{d.nombre}</h3>
-                                                    <span className="text-[9px] uppercase font-black text-slate-400">{d.categoria}</span>
+                                                    <h3 className="font-bold text-sm text-slate-800">{d.nombre}</h3>
+                                                    <p className="text-[10px] uppercase font-black text-slate-400 tracking-tighter">{d.categoria}</p>
                                                 </div>
                                             </div>
-                                            <Icon name="right" size={16} color="#cbd5e1"/>
+                                            <Icon name="chevronRight" size={18} className="text-slate-200 group-hover:text-blue-500 transition-all" />
                                         </div>
                                     ))}
                                 </div>
@@ -200,21 +423,32 @@
                         )}
 
                         {view === 'tools' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-xl font-bold">Calculadora IMC</h2>
-                                    <button onClick={() => setView('home')} className="text-blue-600 text-xs font-bold">Atrás</button>
-                                </div>
-                                <div className="bg-white p-6 rounded-3xl border space-y-4">
-                                    <input type="number" placeholder="Peso (kg)" className="w-full bg-slate-50 p-4 rounded-xl" value={peso} onChange={e => setPeso(e.target.value)}/>
-                                    <input type="number" placeholder="Altura (cm)" className="w-full bg-slate-50 p-4 rounded-xl" value={altura} onChange={e => setAltura(e.target.value)}/>
-                                    <button onClick={calcularIMC} className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold">Calcular</button>
+                            <div className="space-y-6 pb-24">
+                                <h2 className="text-xl font-bold tracking-tight">Evaluación Salud UCN</h2>
+                                <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                                    <div className="grid grid-cols-2 gap-4 mb-6">
+                                        <div>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Peso (kg)</label>
+                                            <input type="number" placeholder="75" className="w-full bg-slate-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500" value={peso} onChange={(e) => setPeso(e.target.value)} />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Altura (cm)</label>
+                                            <input type="number" placeholder="175" className="w-full bg-slate-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500" value={altura} onChange={(e) => setAltura(e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <button onClick={calcularIMC} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-all">Ver Diagnóstico</button>
                                 </div>
                                 {resultadoIMC && (
-                                    <div className="bg-slate-900 p-8 rounded-[2.5rem] text-center text-white">
-                                        <span className="text-[10px] uppercase font-black text-blue-400">Resultado</span>
-                                        <div className="text-6xl font-black my-2">{resultadoIMC.valor}</div>
-                                        <p className="text-sm opacity-80">{resultadoIMC.recomendacion}</p>
+                                    <div className="space-y-4 animate-fade">
+                                        <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] text-center shadow-xl">
+                                            <span className="text-[10px] font-black uppercase text-blue-400">Resultado IMC</span>
+                                            <div className="text-6xl font-black my-2">{resultadoIMC.valor}</div>
+                                            <div className="inline-block px-4 py-1 bg-blue-600 rounded-full font-bold text-xs uppercase">{resultadoIMC.estado}</div>
+                                        </div>
+                                        <div className="bg-blue-50 p-6 rounded-3xl border border-blue-100 shadow-sm">
+                                            <h4 className="font-black text-[11px] text-blue-900 uppercase mb-3 flex items-center gap-2"><Icon name="zap" size={14} /> Recomendación Vital</h4>
+                                            <p className="text-sm text-blue-800 leading-relaxed font-medium">{resultadoIMC.recomendacion}</p>
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -222,37 +456,54 @@
                     </main>
 
                     {/* Navbar */}
-                    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-sm bg-slate-900 rounded-[2rem] p-2 flex justify-around items-center shadow-xl border border-white/10">
-                        <button onClick={() => setView('home')} className={`p-4 rounded-2xl ${view === 'home' ? 'text-blue-500' : 'text-slate-500'}`}><Icon name="home" fill={view === 'home' ? "currentColor" : "none"}/></button>
-                        <button onClick={() => setView('diseases')} className={`p-4 rounded-2xl ${view === 'diseases' ? 'text-blue-500' : 'text-slate-500'}`}><Icon name="book" /></button>
-                        <button onClick={() => setView('tools')} className={`p-4 rounded-2xl ${view === 'tools' ? 'text-blue-500' : 'text-slate-500'}`}><Icon name="calc" /></button>
+                    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm bg-slate-900 text-white rounded-[2rem] p-2 flex justify-around shadow-2xl z-40 border border-white/5 glass-effect">
+                        <button onClick={() => setView('home')} className={`p-4 rounded-2xl transition-all ${view === 'home' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="home" size={22} fill={view === 'home' ? "white" : "none"} /></button>
+                        <button onClick={() => setView('diseases')} className={`p-4 rounded-2xl transition-all ${view === 'diseases' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="book" size={22} /></button>
+                        <button onClick={() => setView('tools')} className={`p-4 rounded-2xl transition-all ${view === 'tools' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="calculator" size={22} /></button>
                     </nav>
 
                     {/* Modal Detalle */}
-                    {selectedDisease && (
-                        <div className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-end justify-center p-0">
-                            <div className="bg-white w-full rounded-t-[3rem] p-8 max-h-[85vh] overflow-y-auto no-scrollbar">
+                    {(selectedDisease || selectedHabit) && (
+                        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 bg-slate-900/80 backdrop-blur-sm animate-fade">
+                            <div className="bg-white w-full max-w-lg rounded-t-[3rem] p-8 max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h2 className="text-3xl font-black">{selectedDisease.nombre}</h2>
-                                    <button onClick={() => setSelectedDisease(null)} className="p-2 bg-slate-100 rounded-full">✕</button>
+                                    <div className="flex-1 pr-4">
+                                        <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest">Salud UCN Informa</span>
+                                        <h2 className="text-3xl font-black mt-3 text-slate-800 leading-tight">{selectedDisease ? selectedDisease.nombre : selectedHabit.titulo}</h2>
+                                    </div>
+                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="bg-slate-100 p-2.5 rounded-full hover:text-red-500 transition-colors">✕</button>
                                 </div>
-                                <div className="space-y-6">
-                                    <div className="bg-slate-50 p-5 rounded-2xl border">
-                                        <h4 className="text-[10px] font-black uppercase text-blue-600 mb-2">Detección</h4>
-                                        <p className="text-sm">{selectedDisease.deteccion}</p>
-                                    </div>
-                                    <div className="bg-green-50 p-5 rounded-2xl border border-green-100">
-                                        <h4 className="text-[10px] font-black uppercase text-green-600 mb-2">Prevención</h4>
-                                        <p className="text-sm">{selectedDisease.prevencion}</p>
-                                    </div>
-                                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
-                                        <h4 className="text-[10px] font-black uppercase text-blue-600 mb-2">Plan de Acción</h4>
-                                        <p className="text-sm">{selectedDisease.queHacer}</p>
-                                    </div>
-                                    <p className="text-[9px] text-amber-600 font-bold uppercase text-center bg-amber-50 p-2 rounded-lg italic">
-                                        Salud UCN: No te automediques. Consulta a un médico.
-                                    </p>
-                                    <button onClick={() => setSelectedDisease(null)} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black">Cerrar</button>
+
+                                <div className="space-y-6 pb-12">
+                                    {selectedDisease ? (
+                                        <React.Fragment>
+                                            <section className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-blue-600 mb-3 tracking-widest"><Icon name="search" size={16} /> Detección</h4>
+                                                <p className="text-sm leading-relaxed text-slate-700 font-medium">{selectedDisease.deteccion}</p>
+                                            </section>
+                                            <section className="bg-green-50 p-6 rounded-3xl border border-green-100">
+                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-green-700 mb-3 tracking-widest"><Icon name="shield" size={16} /> Prevención</h4>
+                                                <p className="text-sm leading-relaxed text-green-800 font-medium">{selectedDisease.prevencion}</p>
+                                            </section>
+                                            <section className="bg-blue-50 p-6 rounded-3xl border border-blue-100">
+                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-blue-700 mb-3 tracking-widest"><Icon name="activity" size={16} /> Plan de Acción</h4>
+                                                <p className="text-sm leading-relaxed text-blue-800 font-medium">{selectedDisease.queHacer}</p>
+                                            </section>
+                                            <div className="bg-amber-50 border border-amber-200 p-5 rounded-3xl flex gap-4">
+                                                <div className="shrink-0 mt-0.5"><Icon name="alert" color="#d97706" size={20} /></div>
+                                                <p className="text-[10px] text-amber-800 font-bold uppercase leading-tight tracking-tight text-justify italic">Aviso Salud UCN: No te automediques. La prescripción farmacológica es responsabilidad exclusiva de un médico.</p>
+                                            </div>
+                                        </React.Fragment>
+                                    ) : (
+                                        <div className="space-y-6">
+                                            <div className="flex justify-center py-8 bg-slate-50 rounded-[2.5rem] mb-4 scale-125">{selectedHabit.icono}</div>
+                                            <section className="bg-indigo-50 p-8 rounded-[2.5rem] border border-indigo-100">
+                                                <h4 className="font-black uppercase text-[11px] text-indigo-900 mb-4 tracking-widest flex items-center gap-2"><Icon name="zap" size={16} /> Ciencia y Salud</h4>
+                                                <p className="text-base leading-relaxed text-indigo-950 font-medium italic">"{selectedHabit.detalles}"</p>
+                                            </section>
+                                        </div>
+                                    )}
+                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl active:scale-95 transition-all uppercase tracking-widest">Cerrar</button>
                                 </div>
                             </div>
                         </div>
