@@ -72,7 +72,8 @@
                 droplets: <path d="M7 16.3c2.2 0 4-1.8 4-4 0-3.3-4-8-4-8s-4 4.7-4 8c0 2.2 1.8 4 4 4z" />,
                 moon: <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />,
                 alert: <g><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></g>,
-                sun: <g><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></g>
+                sun: <g><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></g>,
+                siren: <g><path d="M7 18v-6a5 5 0 1 1 10 0v6" /><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1z" /><path d="M12 7V4" /><path d="M9 4l2 2" /><path d="M15 4l-2 2" /></g>
             };
 
             return (
@@ -259,6 +260,56 @@
             { id: 4, titulo: "Movimiento", desc: "El músculo es medicina metabólica.", icono: <Icon name="zap" color="#f97316" />, detalles: "150 min de ejercicio moderado reduce riesgo de infarto en un 30%. El entrenamiento de fuerza mantiene la densidad ósea." }
         ];
 
+        const SIGNOS_ALARMA = [
+            {
+                categoria: "Emergencia Cardiovascular",
+                icono: "heart",
+                color: "text-red-600",
+                bg: "bg-red-50",
+                sintomas: [
+                    "Dolor u opresión intensa en el pecho.",
+                    "Sudoración fría repentina asociada a malestar.",
+                    "Sensación de desmayo inminente.",
+                    "Palpitaciones muy rápidas o irregulares en reposo."
+                ]
+            },
+            {
+                categoria: "Emergencia Neurológica",
+                icono: "brain",
+                color: "text-purple-600",
+                bg: "bg-purple-50",
+                sintomas: [
+                    "Dolor de cabeza intenso que no cede con analgésicos.",
+                    "Pérdida de conciencia o desorientación súbita.",
+                    "Debilidad o parálisis en un lado de la cara o el cuerpo.",
+                    "Dificultad repentina para hablar o comprender."
+                ]
+            },
+            {
+                categoria: "Emergencia Respiratoria",
+                icono: "activity",
+                color: "text-blue-600",
+                bg: "bg-blue-50",
+                sintomas: [
+                    "Dificultad severa para respirar o sensación de ahogo.",
+                    "Labios o uñas de color azulado.",
+                    "Ruidos extraños (pitos o ronquidos) al respirar."
+                ]
+            },
+            {
+                categoria: "Síntomas Generales de Alerta",
+                icono: "alert",
+                color: "text-amber-600",
+                bg: "bg-amber-50",
+                sintomas: [
+                    "Mareos constantes que impiden mantenerse en pie.",
+                    "Fiebre muy alta (>39°C) que no baja con medios físicos.",
+                    "Visión borrosa repentina o pérdida de visión.",
+                    "Vómitos persistentes que impiden la hidratación."
+                ]
+            }
+        ];
+
         const App = () => {
             const [view, setView] = useState('home'); 
             const [searchQuery, setSearchQuery] = useState('');
@@ -357,11 +408,14 @@
                                         <h3 className="font-bold text-slate-800 text-xl mb-2">Calculadora IMC</h3>
                                         <p className="text-slate-500 text-sm">Evalúa tu estado nutricional y recibe recomendaciones personalizadas.</p>
                                     </button>
-                                    <div className="p-8 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200 flex flex-col justify-center items-center text-center opacity-60">
-                                        <div className="bg-white p-4 rounded-2xl mb-4"><Icon name="activity" color="#94a3b8" size={32} /></div>
-                                        <span className="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Próximamente</span>
-                                        <p className="text-slate-400 text-sm mt-1">Nuevas herramientas de salud mental.</p>
-                                    </div>
+                                    <button onClick={() => setView('alarms')} className="group p-8 bg-white rounded-[2rem] border border-red-100 flex flex-col items-start text-left shadow-sm hover:shadow-xl hover:border-red-300 active:scale-[0.98] transition-all relative overflow-hidden">
+                                        <div className="bg-red-600 p-4 rounded-2xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-red-200"><Icon name="siren" color="white" size={32} /></div>
+                                        <h3 className="font-bold text-slate-800 text-xl mb-2">Signos de Alarma</h3>
+                                        <p className="text-slate-500 text-sm">Identifica cuándo una situación requiere atención médica inmediata.</p>
+                                        <div className="absolute top-2 right-2 flex gap-1">
+                                            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                        </div>
+                                    </button>
                                 </div>
 
                                 <section>
@@ -516,6 +570,56 @@
                                             <p className="text-xs mt-2 text-center">Introduce tu peso y altura para recibir un análisis clínico preventivo.</p>
                                         </div>
                                     )}
+                                </div>
+                            </div>
+                        )}
+
+                        {view === 'alarms' && (
+                            <div className="max-w-4xl mx-auto space-y-8 animate-fade">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h2 className="text-3xl font-black tracking-tight text-red-600">Signos de Alarma Crítica</h2>
+                                        <p className="text-slate-500 text-sm font-medium italic">Si presentas cualquiera de estos síntomas, consulta inmediatamente a tu médico o acude a urgencias.</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setView('home')} 
+                                        className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-2xl font-bold transition-all active:scale-95"
+                                    >
+                                        <Icon name="chevronLeft" size={18} />
+                                        Atrás
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {SIGNOS_ALARMA.map((cat, idx) => (
+                                        <div key={idx} className={`p-8 rounded-[2.5rem] border border-slate-100 shadow-sm ${cat.bg}`}>
+                                            <div className="flex items-center gap-4 mb-6">
+                                                <div className={`p-3 rounded-2xl bg-white shadow-sm ${cat.color}`}>
+                                                    <Icon name={cat.icono} size={24} />
+                                                </div>
+                                                <h3 className="font-black text-slate-800 text-lg">{cat.categoria}</h3>
+                                            </div>
+                                            <ul className="space-y-4">
+                                                {cat.sintomas.map((sintoma, sIdx) => (
+                                                    <li key={sIdx} className="flex items-start gap-3">
+                                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${cat.color.replace('text', 'bg')}`}></div>
+                                                        <p className="text-slate-700 text-sm font-bold leading-relaxed">{sintoma}</p>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="bg-red-600 p-8 rounded-[2.5rem] text-white shadow-2xl shadow-red-100 flex flex-col md:flex-row items-center gap-8 border-4 border-red-500">
+                                    <div className="bg-white/20 p-6 rounded-full animate-pulse shrink-0">
+                                        <Icon name="siren" size={64} color="white" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black uppercase tracking-tight">Acción Inmediata</h3>
+                                        <p className="text-red-100 font-bold text-lg leading-snug">No esperes a que los síntomas pasen por sí solos. En emergencias, cada minuto cuenta para preservar tu salud e integridad física.</p>
+                                        <p className="text-sm font-medium opacity-80 pt-2 tracking-wide uppercase font-black italic">Consultar inmediatamente con su red de salud más cercana.</p>
+                                    </div>
                                 </div>
                             </div>
                         )}
