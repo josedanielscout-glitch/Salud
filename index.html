@@ -46,7 +46,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-slate-100 text-slate-900">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -92,9 +92,7 @@
             );
         };
 
-        // Base de datos completa: 150 enfermedades
         const ENFERMEDADES = [
-            // --- INFECCIOSAS ---
             { id: 1, nombre: "Gripe (Influenza)", categoria: "Infecciosa", deteccion: "Fiebre alta repentina, dolores musculares y tos seca.", prevencion: "Vacunación anual y lavado de manos.", queHacer: "Reposo e hidratación profunda.", severidad: "Media" },
             { id: 2, nombre: "Dengue", categoria: "Infecciosa", deteccion: "Dolor retro-ocular, fiebre alta y fatiga extrema.", prevencion: "Eliminar criaderos de mosquitos.", queHacer: "Hidratación masiva. Evitar aspirina/ibuprofeno.", severidad: "Alta" },
             { id: 3, nombre: "Tuberculosis", categoria: "Infecciosa", deteccion: "Tos persistente >15 días, sudores nocturnos.", prevencion: "Vacuna BCG y ambientes ventilados.", queHacer: "Control estricto por salud pública.", severidad: "Alta" },
@@ -116,7 +114,6 @@
             { id: 19, nombre: "Gonorrea", categoria: "Infecciosa", deteccion: "Ardor al orinar y flujo amarillento.", prevencion: "Protección sexual.", queHacer: "Tratamiento de pareja simultáneo.", severidad: "Media" },
             { id: 20, nombre: "Fiebre Amarilla", categoria: "Infecciosa", deteccion: "Fiebre, ictericia y sangrados.", prevencion: "Vacunación zonas de riesgo.", queHacer: "Soporte hospitalario.", severidad: "Alta" },
 
-            // --- CARDIOVASCULARES ---
             { id: 21, nombre: "Hipertensión Arterial", categoria: "Cardiovascular", deteccion: "Asintomática o mareos/cefalea.", prevencion: "Bajo sodio y ejercicio.", queHacer: "Registro diario de presión.", severidad: "Crónica" },
             { id: 22, nombre: "Infarto al Miocardio", categoria: "Cardiovascular", deteccion: "Dolor opresivo en pecho e irradiación.", prevencion: "Dieta sana y no fumar.", queHacer: "Llamar a emergencias inmediato.", severidad: "Crítica" },
             { id: 23, nombre: "Arritmia", categoria: "Cardiovascular", deteccion: "Palpitaciones o aleteos en pecho.", prevencion: "Moderar cafeína y alcohol.", queHacer: "Evaluación cardiológica.", severidad: "Media" },
@@ -138,7 +135,6 @@
             { id: 39, nombre: "Síncope Vasovagal", categoria: "Cardiovascular", deteccion: "Desmayo tras dolor o miedo.", prevencion: "Hidratación constante.", queHacer: "Elevar piernas al marearse.", severidad: "Baja" },
             { id: 40, nombre: "Edema Pulmonar", categoria: "Cardiovascular", deteccion: "Falta de aire crítica y tos rosa.", prevencion: "Controlar corazón/riñón.", queHacer: "Emergencia absoluta.", severidad: "Crítica" },
 
-            // --- METABÓLICAS ---
             { id: 41, nombre: "Diabetes Tipo 1", categoria: "Metabólica", deteccion: "Sed y pérdida de peso rápida.", prevencion: "No aplicable.", queHacer: "Reemplazo hormonal insulina.", severidad: "Crónica" },
             { id: 42, nombre: "Diabetes Tipo 2", categoria: "Metabólica", deteccion: "Visión borrosa y cansancio.", prevencion: "Dieta baja en azúcar.", queHacer: "Ejercicio y control de peso.", severidad: "Crónica" },
             { id: 43, nombre: "Hipotiroidismo", categoria: "Metabólica", deteccion: "Frío, piel seca y fatiga.", prevencion: "Sal yodada.", queHacer: "Suplemento hormonal médico.", severidad: "Crónica" },
@@ -160,7 +156,6 @@
             { id: 59, nombre: "Porfiria", categoria: "Metabólica", deteccion: "Orina roja y dolor abdomen.", prevencion: "Evitar gatillos sol/fármacos.", queHacer: "Protección solar total.", severidad: "Crónica" },
             { id: 60, nombre: "Acromegalia", categoria: "Metabólica", deteccion: "Manos y pies que crecen.", prevencion: "No conocida.", queHacer: "Cirugía hipófisis.", severidad: "Alta" },
 
-            // --- RESPIRATORIAS ---
             { id: 61, nombre: "Asma Bronquial", categoria: "Respiratoria", deteccion: "Pitos al respirar y tos.", prevencion: "Evitar ácaros y humo.", queHacer: "Inhaladores de control.", severidad: "Crónica" },
             { id: 62, nombre: "EPOC", categoria: "Respiratoria", deteccion: "Tos de fumador y fatiga.", prevencion: "Cero tabaco.", queHacer: "Rehabilitación pulmonar.", severidad: "Crónica" },
             { id: 63, nombre: "Neumonía", categoria: "Respiratoria", deteccion: "Fiebre y dolor al respirar.", prevencion: "Vacunas antineumo.", queHacer: "Antibióticos bajo receta.", severidad: "Alta" },
@@ -182,7 +177,6 @@
             { id: 79, nombre: "Bronquiectasias", categoria: "Respiratoria", deteccion: "Flema excesiva diaria.", prevencion: "Tratar tos infancia.", queHacer: "Fisioterapia tórax.", severidad: "Crónica" },
             { id: 80, nombre: "Edema Glotis", categoria: "Respiratoria", deteccion: "No pasa aire cuello.", prevencion: "Control alergias.", queHacer: "Emergencia total.", severidad: "Crítica" },
 
-            // --- DIGESTIVAS ---
             { id: 81, nombre: "Gastritis", categoria: "Digestiva", deteccion: "Ardor en boca estómago.", prevencion: "No picantes.", queHacer: "Fraccionar comidas.", severidad: "Media" },
             { id: 82, nombre: "Reflujo (ERGE)", categoria: "Digestiva", deteccion: "Acidez tras comer.", prevencion: "Cenas ligeras.", queHacer: "No acostarse pronto.", severidad: "Media" },
             { id: 83, nombre: "Úlcera Gástrica", categoria: "Digestiva", deteccion: "Dolor estómago vacío.", prevencion: "Evitar aspirinas.", queHacer: "Test H. Pylori.", severidad: "Media" },
@@ -204,7 +198,6 @@
             { id: 99, nombre: "Parásitos (Giardia)", categoria: "Digestiva", deteccion: "Heces con grasa.", prevencion: "Agua potable.", queHacer: "Higiene extrema.", severidad: "Baja" },
             { id: 100, nombre: "Colecistitis", categoria: "Digestiva", deteccion: "Fiebre y dolor vesícula.", prevencion: "Controlar piedras.", queHacer: "Cirugía urgente.", severidad: "Alta" },
 
-            // --- MENTALES ---
             { id: 101, nombre: "Depresión", categoria: "Mental", deteccion: "Tristeza profunda.", prevencion: "Red de apoyo.", queHacer: "Psicoterapia.", severidad: "Alta" },
             { id: 102, nombre: "Ansiedad", categoria: "Mental", deteccion: "Palpitaciones y miedo.", prevencion: "Mindfulness.", queHacer: "Respiración.", severidad: "Media" },
             { id: 103, nombre: "TDAH", categoria: "Mental", deteccion: "Falta atención niños.", prevencion: "Detección precoz.", queHacer: "Terapia conducta.", severidad: "Crónica" },
@@ -221,7 +214,6 @@
             { id: 114, nombre: "Dismorfia", categoria: "Mental", deteccion: "Obsesión por defecto.", prevencion: "Educación crítica.", queHacer: "Psicología.", severidad: "Media" },
             { id: 115, nombre: "Demencia", categoria: "Mental", deteccion: "Confusión mental.", prevencion: "Leer y jugar.", queHacer: "Entorno seguro.", severidad: "Alta" },
 
-            // --- NEUROLÓGICAS ---
             { id: 116, nombre: "Alzheimer", categoria: "Neurológica", deteccion: "Olvidos recientes.", prevencion: "Gimnasia mental.", queHacer: "Estimulación.", severidad: "Alta" },
             { id: 117, nombre: "Parkinson", categoria: "Neurológica", deteccion: "Temblores reposo.", prevencion: "Ejercicio físico.", queHacer: "Fisioterapia.", severidad: "Alta" },
             { id: 118, nombre: "Migraña", categoria: "Neurológica", deteccion: "Dolor pulsátil ojo.", prevencion: "Evitar quesos/vino.", queHacer: "Habitación oscura.", severidad: "Media" },
@@ -238,7 +230,6 @@
             { id: 129, nombre: "Cefalea Tensional", categoria: "Neurológica", deteccion: "Presión en sienes.", prevencion: "Postura y relax.", queHacer: "Calor cuello.", severidad: "Baja" },
             { id: 130, nombre: "Corea", categoria: "Neurológica", deteccion: "Movimientos raros.", prevencion: "Genético.", queHacer: "Soporte neurológico.", severidad: "Crónica" },
 
-            // --- DERMATOLÓGICAS, ARTICULARES, OTRAS ---
             { id: 131, nombre: "Dermatitis", categoria: "Dermatológica", deteccion: "Piel roja picor.", prevencion: "Jabón neutro.", queHacer: "Hidratar piel.", severidad: "Baja" },
             { id: 132, nombre: "Psoriasis", categoria: "Dermatológica", deteccion: "Escamas blancas.", prevencion: "Control estrés.", queHacer: "Exposición sol.", severidad: "Crónica" },
             { id: 133, nombre: "Vitíligo", categoria: "Dermatológica", deteccion: "Manchas blancas.", prevencion: "No conocida.", queHacer: "Protección solar.", severidad: "Baja" },
@@ -322,54 +313,72 @@
             };
 
             return (
-                <div className="min-h-screen bg-slate-50 pb-24 max-w-lg mx-auto shadow-xl bg-white border-x">
-                    <header className="bg-white sticky top-0 z-30 px-6 py-4 border-b border-slate-100 flex justify-between items-center shadow-sm glass-effect">
+                <div className="min-h-screen bg-slate-50 max-w-5xl mx-auto shadow-2xl bg-white border-x transition-all duration-300">
+                    <header className="bg-white sticky top-0 z-30 px-6 py-5 border-b border-slate-100 flex justify-between items-center glass-effect">
                         <div className="flex items-center gap-2 cursor-pointer transition-transform active:scale-95" onClick={() => setView('home')}>
-                            <div className="bg-blue-600 p-1.5 rounded-lg shadow-lg">
-                                <Icon name="heart" color="white" fill="white" size={18} />
+                            <div className="bg-blue-600 p-2 rounded-xl shadow-lg">
+                                <Icon name="heart" color="white" fill="white" size={20} />
                             </div>
-                            <h1 className="text-lg font-black text-slate-800 tracking-tight">Salud <span className="text-blue-600 font-black">UCN</span></h1>
+                            <h1 className="text-xl font-black text-slate-800 tracking-tight">Salud <span className="text-blue-600 font-black">UCN</span></h1>
                         </div>
-                        <div className="text-[10px] font-black text-slate-400 bg-slate-100 px-3 py-1 rounded-full uppercase">150 Casos</div>
+                        <div className="flex items-center gap-4">
+                            <div className="text-[10px] font-black text-slate-400 bg-slate-100 px-3 py-1.5 rounded-full uppercase">Bienestar Estudiantil</div>
+                        </div>
                     </header>
 
-                    <main className="px-6 pt-6 animate-fade">
+                    <main className="px-8 pt-8 animate-fade pb-16">
                         {view === 'home' && (
-                            <div className="space-y-6">
-                                <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
-                                    <div className="relative z-10">
-                                        <h2 className="text-2xl font-bold mb-1 tracking-tight">Salud UCN</h2>
-                                        <p className="opacity-70 mb-6 text-xs font-medium">Enciclopedia médica universitaria con 150 condiciones.</p>
-                                        <div className="relative">
-                                            <div className="absolute left-3 top-3.5"><Icon name="search" color="#94a3b8" size={16} /></div>
+                            <div className="space-y-10">
+                                <div className="bg-slate-900 rounded-[2.5rem] p-12 text-white relative overflow-hidden shadow-2xl">
+                                    <div className="relative z-10 max-w-2xl">
+                                        <h2 className="text-4xl font-extrabold mb-2 tracking-tight">Portal de Bienestar Salud UCN</h2>
+                                        <p className="text-slate-400 mb-8 text-lg font-medium leading-relaxed">Tu enciclopedia médica universitaria con 150 condiciones detalladas y herramientas de diagnóstico preventivo.</p>
+                                        <div className="relative max-w-md">
+                                            <div className="absolute left-4 top-4"><Icon name="search" color="#94a3b8" size={20} /></div>
                                             <input 
-                                                type="text" placeholder="¿Qué síntoma buscas?..."
-                                                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500"
+                                                type="text" placeholder="¿Qué síntoma o condición buscas?..."
+                                                className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 pl-12 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500 transition-all"
                                                 onFocus={() => setView('diseases')}
                                             />
                                         </div>
                                     </div>
-                                    <div className="absolute top-[-20%] right-[-10%] w-48 h-48 bg-blue-600/20 rounded-full blur-3xl"></div>
+                                    <div className="absolute -top-24 -right-24 w-80 h-80 bg-blue-600/20 rounded-full blur-[100px]"></div>
+                                    <div className="absolute bottom-[-10%] left-[-5%] w-40 h-40 bg-blue-400/10 rounded-full blur-[80px]"></div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button onClick={() => setView('diseases')} className="p-6 bg-white rounded-3xl border border-slate-100 flex flex-col items-center text-center shadow-sm hover:border-blue-300 active:scale-95 transition-all">
-                                        <div className="bg-red-50 p-3 rounded-2xl mb-3"><Icon name="stethoscope" color="#ef4444" size={24} /></div>
-                                        <span className="font-bold text-slate-800 text-sm">Directorio Médico</span>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <button onClick={() => setView('diseases')} className="group p-8 bg-white rounded-[2rem] border border-slate-100 flex flex-col items-start text-left shadow-sm hover:shadow-xl hover:border-blue-300 active:scale-[0.98] transition-all">
+                                        <div className="bg-red-50 p-4 rounded-2xl mb-6 group-hover:scale-110 transition-transform"><Icon name="stethoscope" color="#ef4444" size={32} /></div>
+                                        <h3 className="font-bold text-slate-800 text-xl mb-2">Directorio Médico</h3>
+                                        <p className="text-slate-500 text-sm">Explora las 150 fichas clínicas con detección y prevención.</p>
                                     </button>
-                                    <button onClick={() => setView('tools')} className="p-6 bg-white rounded-3xl border border-slate-100 flex flex-col items-center text-center shadow-sm hover:border-blue-300 active:scale-95 transition-all">
-                                        <div className="bg-blue-50 p-3 rounded-2xl mb-3"><Icon name="calculator" color="#3b82f6" size={24} /></div>
-                                        <span className="font-bold text-slate-800 text-sm">Calculadora IMC</span>
+                                    <button onClick={() => setView('tools')} className="group p-8 bg-white rounded-[2rem] border border-slate-100 flex flex-col items-start text-left shadow-sm hover:shadow-xl hover:border-blue-300 active:scale-[0.98] transition-all">
+                                        <div className="bg-blue-50 p-4 rounded-2xl mb-6 group-hover:scale-110 transition-transform"><Icon name="calculator" color="#3b82f6" size={32} /></div>
+                                        <h3 className="font-bold text-slate-800 text-xl mb-2">Calculadora IMC</h3>
+                                        <p className="text-slate-500 text-sm">Evalúa tu estado nutricional y recibe recomendaciones personalizadas.</p>
                                     </button>
+                                    <div className="p-8 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200 flex flex-col justify-center items-center text-center opacity-60">
+                                        <div className="bg-white p-4 rounded-2xl mb-4"><Icon name="activity" color="#94a3b8" size={32} /></div>
+                                        <span className="font-bold text-slate-400 uppercase text-[10px] tracking-widest">Próximamente</span>
+                                        <p className="text-slate-400 text-sm mt-1">Nuevas herramientas de salud mental.</p>
+                                    </div>
                                 </div>
 
                                 <section>
-                                    <h3 className="font-bold text-slate-800 mb-4 px-1">Pilares de Salud</h3>
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="flex justify-between items-end mb-6">
+                                        <div>
+                                            <h3 className="font-black text-slate-800 text-2xl tracking-tight">Pilares de Salud</h3>
+                                            <p className="text-slate-500 text-sm">Hábitos recomendados por especialistas de la UCN.</p>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                         {HABITOS.map(h => (
-                                            <div key={h.id} onClick={() => setSelectedHabit(h)} className="p-4 bg-white rounded-2xl border border-slate-100 flex items-center gap-3 cursor-pointer hover:border-blue-200 active:scale-95 transition-all shadow-sm">
-                                                <div className="p-2 bg-slate-50 rounded-lg shrink-0">{h.icono}</div>
-                                                <span className="text-[10px] font-black uppercase text-slate-600 leading-tight">{h.titulo}</span>
+                                            <div key={h.id} onClick={() => setSelectedHabit(h)} className="group p-6 bg-white rounded-3xl border border-slate-100 flex items-center gap-5 cursor-pointer hover:shadow-lg hover:border-blue-200 transition-all active:scale-95">
+                                                <div className="p-3 bg-slate-50 rounded-2xl shrink-0 group-hover:bg-blue-50 transition-colors">{h.icono}</div>
+                                                <div>
+                                                    <span className="text-[11px] font-black uppercase text-slate-400 tracking-tighter">{h.titulo}</span>
+                                                    <p className="text-xs text-slate-600 font-medium line-clamp-1">{h.desc}</p>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -378,132 +387,197 @@
                         )}
 
                         {view === 'diseases' && (
-                            <div className="space-y-4 pb-24">
-                                <div className="flex justify-between items-center mb-2">
-                                    <h2 className="text-xl font-bold tracking-tight">Fichas Clínicas ({filteredDiseases.length})</h2>
-                                    <button onClick={() => setView('home')} className="text-sm text-blue-600 font-bold">Atrás</button>
+                            <div className="space-y-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h2 className="text-3xl font-black tracking-tight">Fichas Clínicas</h2>
+                                        <p className="text-slate-500 text-sm font-medium">Mostrando {filteredDiseases.length} condiciones médicas registradas.</p>
+                                    </div>
+                                    <button 
+                                        onClick={() => setView('home')} 
+                                        className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-2xl font-bold transition-all active:scale-95"
+                                    >
+                                        <Icon name="chevronLeft" size={18} />
+                                        Atrás
+                                    </button>
                                 </div>
                                 
-                                <div className="relative">
-                                    <div className="absolute left-3 top-3.5"><Icon name="search" color="#94a3b8" size={16} /></div>
-                                    <input 
-                                        type="text" placeholder="Fiebre, tos, dolor..."
-                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-500 shadow-inner"
-                                        value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                                    />
-                                </div>
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div className="lg:col-span-1 space-y-6">
+                                        <div className="relative">
+                                            <div className="absolute left-4 top-4"><Icon name="search" color="#94a3b8" size={18} /></div>
+                                            <input 
+                                                type="text" placeholder="Filtrar por nombre o síntoma..."
+                                                className="w-full bg-white border border-slate-200 rounded-2xl py-4 pl-12 pr-6 text-sm focus:ring-2 focus:ring-blue-500 shadow-sm"
+                                                value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                        </div>
 
-                                <div className="relative flex items-center group">
-                                    <button onClick={() => scrollCategories('left')} className="absolute left-0 z-10 bg-white/90 p-1 rounded-full shadow-md border border-slate-100 transition-opacity active:scale-90"><Icon name="chevronLeft" size={16} /></button>
-                                    <div ref={categoryScrollRef} className="flex gap-2 overflow-x-auto pb-2 no-scrollbar px-1 w-full" style={{ scrollbarWidth: 'none' }}>
-                                        {categorias.map(cat => (
-                                            <button key={cat} onClick={() => setSelectedCategory(cat)} className={`px-4 py-2 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all ${selectedCategory === cat ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-200 text-slate-600'}`}>{cat}</button>
+                                        <div className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+                                            <h4 className="font-bold text-slate-800 text-sm mb-4 px-2 uppercase tracking-widest text-[10px]">Categorías</h4>
+                                            <div className="flex flex-wrap lg:flex-col gap-2">
+                                                {categorias.map(cat => (
+                                                    <button 
+                                                        key={cat} 
+                                                        onClick={() => setSelectedCategory(cat)} 
+                                                        className={`px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all text-left flex justify-between items-center ${selectedCategory === cat ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+                                                    >
+                                                        {cat}
+                                                        {selectedCategory === cat && <Icon name="chevronRight" size={12} />}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 h-fit">
+                                        {filteredDiseases.map(d => (
+                                            <div key={d.id} onClick={() => setSelectedDisease(d)} className="bg-white p-5 rounded-[1.5rem] border border-slate-100 flex items-center justify-between group cursor-pointer active:scale-[0.98] hover:border-blue-300 hover:shadow-md transition-all">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`p-3 rounded-2xl ${d.severidad === 'Crítica' ? 'bg-black text-white' : d.severidad === 'Alta' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                                                        <Icon name="thermometer" size={20} color="currentColor" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-sm text-slate-800 line-clamp-1">{d.nombre}</h3>
+                                                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-tighter">{d.categoria}</p>
+                                                    </div>
+                                                </div>
+                                                <Icon name="chevronRight" size={20} className="text-slate-200 group-hover:text-blue-500 transition-all shrink-0" />
+                                            </div>
                                         ))}
                                     </div>
-                                    <button onClick={() => scrollCategories('right')} className="absolute right-0 z-10 bg-white/90 p-1 rounded-full shadow-md border border-slate-100 transition-opacity active:scale-90"><Icon name="chevronRight" size={16} /></button>
-                                </div>
-
-                                <div className="grid gap-3">
-                                    {filteredDiseases.map(d => (
-                                        <div key={d.id} onClick={() => setSelectedDisease(d)} className="bg-white p-4 rounded-2xl border border-slate-100 flex items-center justify-between group cursor-pointer active:scale-[0.98] hover:border-blue-300 transition-all shadow-sm">
-                                            <div className="flex items-center gap-4">
-                                                <div className={`p-2.5 rounded-xl ${d.severidad === 'Crítica' ? 'bg-black text-white' : d.severidad === 'Alta' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
-                                                    <Icon name="thermometer" size={18} color="currentColor" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-sm text-slate-800">{d.nombre}</h3>
-                                                    <p className="text-[10px] uppercase font-black text-slate-400 tracking-tighter">{d.categoria}</p>
-                                                </div>
-                                            </div>
-                                            <Icon name="chevronRight" size={18} className="text-slate-200 group-hover:text-blue-500 transition-all" />
-                                        </div>
-                                    ))}
                                 </div>
                             </div>
                         )}
 
                         {view === 'tools' && (
-                            <div className="space-y-6 pb-24">
-                                <h2 className="text-xl font-bold tracking-tight">Evaluación Salud UCN</h2>
-                                <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                                    <div className="grid grid-cols-2 gap-4 mb-6">
-                                        <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Peso (kg)</label>
-                                            <input type="number" placeholder="75" className="w-full bg-slate-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500" value={peso} onChange={(e) => setPeso(e.target.value)} />
-                                        </div>
-                                        <div>
-                                            <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block tracking-widest">Altura (cm)</label>
-                                            <input type="number" placeholder="175" className="w-full bg-slate-50 border-none rounded-xl p-4 text-sm focus:ring-2 focus:ring-blue-500" value={altura} onChange={(e) => setAltura(e.target.value)} />
-                                        </div>
+                            <div className="max-w-3xl mx-auto space-y-8 animate-fade">
+                                <div className="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h2 className="text-3xl font-black tracking-tight">Evaluación de Estado Físico</h2>
+                                        <p className="text-slate-500 text-sm font-medium">Calculadora de Índice de Masa Corporal (IMC) y consejos nutricionales.</p>
                                     </div>
-                                    <button onClick={calcularIMC} className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-all">Ver Diagnóstico</button>
+                                    <button 
+                                        onClick={() => setView('home')} 
+                                        className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-2xl font-bold transition-all active:scale-95"
+                                    >
+                                        <Icon name="chevronLeft" size={18} />
+                                        Atrás
+                                    </button>
                                 </div>
-                                {resultadoIMC && (
-                                    <div className="space-y-4 animate-fade">
-                                        <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] text-center shadow-xl">
-                                            <span className="text-[10px] font-black uppercase text-blue-400">Resultado IMC</span>
-                                            <div className="text-6xl font-black my-2">{resultadoIMC.valor}</div>
-                                            <div className="inline-block px-4 py-1 bg-blue-600 rounded-full font-bold text-xs uppercase">{resultadoIMC.estado}</div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                                    <div className="bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-xl space-y-8">
+                                        <div className="space-y-6">
+                                            <div>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase mb-3 block tracking-[0.2em]">Peso Actual (kg)</label>
+                                                <input 
+                                                    type="number" 
+                                                    placeholder="Ej: 75" 
+                                                    className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl p-5 text-lg font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" 
+                                                    value={peso} 
+                                                    onChange={(e) => setPeso(e.target.value)} 
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-black text-slate-400 uppercase mb-3 block tracking-[0.2em]">Altura (cm)</label>
+                                                <input 
+                                                    type="number" 
+                                                    placeholder="Ej: 175" 
+                                                    className="w-full bg-slate-50 border-2 border-slate-50 rounded-2xl p-5 text-lg font-bold focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all outline-none" 
+                                                    value={altura} 
+                                                    onChange={(e) => setAltura(e.target.value)} 
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="bg-blue-50 p-6 rounded-3xl border border-blue-100 shadow-sm">
-                                            <h4 className="font-black text-[11px] text-blue-900 uppercase mb-3 flex items-center gap-2"><Icon name="zap" size={14} /> Recomendación Vital</h4>
-                                            <p className="text-sm text-blue-800 leading-relaxed font-medium">{resultadoIMC.recomendacion}</p>
-                                        </div>
+                                        <button onClick={calcularIMC} className="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-black shadow-lg shadow-blue-200 active:scale-95 transition-all text-lg">Calcular Diagnóstico</button>
                                     </div>
-                                )}
+
+                                    {resultadoIMC ? (
+                                        <div className="space-y-6 animate-fade">
+                                            <div className="bg-slate-900 text-white p-10 rounded-[3rem] text-center shadow-2xl relative overflow-hidden">
+                                                <span className="text-[11px] font-black uppercase text-blue-400 tracking-[0.3em] mb-4 block">Tu Puntuación IMC</span>
+                                                <div className="text-8xl font-black my-4 tracking-tighter">{resultadoIMC.valor}</div>
+                                                <div className="inline-block px-8 py-2 bg-blue-600 rounded-full font-black text-sm uppercase tracking-widest">{resultadoIMC.estado}</div>
+                                                <div className="absolute top-0 right-0 p-10 opacity-10"><Icon name="activity" size={120} /></div>
+                                            </div>
+                                            <div className="bg-blue-50 p-8 rounded-[2rem] border border-blue-100 shadow-sm">
+                                                <h4 className="font-black text-xs text-blue-900 uppercase mb-4 flex items-center gap-3 tracking-widest">
+                                                    <div className="bg-blue-200 p-1.5 rounded-lg"><Icon name="zap" size={16} /></div> 
+                                                    Hoja de Ruta Nutricional
+                                                </h4>
+                                                <p className="text-base text-blue-900 leading-relaxed font-semibold italic">"{resultadoIMC.recomendacion}"</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="h-full flex flex-col justify-center items-center p-10 bg-slate-50 rounded-[2.5rem] border-2 border-dashed border-slate-200 text-slate-400">
+                                            <Icon name="calculator" size={48} className="mb-4 opacity-20" />
+                                            <p className="text-sm font-bold uppercase tracking-widest">Esperando Datos</p>
+                                            <p className="text-xs mt-2 text-center">Introduce tu peso y altura para recibir un análisis clínico preventivo.</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </main>
 
-                    {/* Navbar */}
-                    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm bg-slate-900 text-white rounded-[2rem] p-2 flex justify-around shadow-2xl z-40 border border-white/5 glass-effect">
-                        <button onClick={() => setView('home')} className={`p-4 rounded-2xl transition-all ${view === 'home' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="home" size={22} fill={view === 'home' ? "white" : "none"} /></button>
-                        <button onClick={() => setView('diseases')} className={`p-4 rounded-2xl transition-all ${view === 'diseases' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="book" size={22} /></button>
-                        <button onClick={() => setView('tools')} className={`p-4 rounded-2xl transition-all ${view === 'tools' ? 'bg-blue-600 text-white shadow-inner' : 'text-slate-500'}`}><Icon name="calculator" size={22} /></button>
-                    </nav>
-
                     {/* Modal Detalle */}
                     {(selectedDisease || selectedHabit) && (
-                        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 bg-slate-900/80 backdrop-blur-sm animate-fade">
-                            <div className="bg-white w-full max-w-lg rounded-t-[3rem] p-8 max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="flex-1 pr-4">
-                                        <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-widest">Salud UCN Informa</span>
-                                        <h2 className="text-3xl font-black mt-3 text-slate-800 leading-tight">{selectedDisease ? selectedDisease.nombre : selectedHabit.titulo}</h2>
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-900/90 backdrop-blur-md animate-fade">
+                            <div className="bg-white w-full max-w-2xl rounded-[3rem] p-10 max-h-[90vh] overflow-y-auto no-scrollbar shadow-2xl border border-white/20">
+                                <div className="flex justify-between items-start mb-10">
+                                    <div className="flex-1 pr-6">
+                                        <span className="text-[11px] font-black text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full uppercase tracking-[0.2em]">Ficha Informativa Salud UCN</span>
+                                        <h2 className="text-4xl font-black mt-4 text-slate-800 leading-tight tracking-tight">{selectedDisease ? selectedDisease.nombre : selectedHabit.titulo}</h2>
                                     </div>
-                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="bg-slate-100 p-2.5 rounded-full hover:text-red-500 transition-colors">✕</button>
+                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="bg-slate-100 p-3 rounded-full hover:bg-red-50 hover:text-red-500 transition-all active:scale-90">✕</button>
                                 </div>
 
-                                <div className="space-y-6 pb-12">
+                                <div className="space-y-8 pb-4">
                                     {selectedDisease ? (
                                         <React.Fragment>
-                                            <section className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-blue-600 mb-3 tracking-widest"><Icon name="search" size={16} /> Detección</h4>
-                                                <p className="text-sm leading-relaxed text-slate-700 font-medium">{selectedDisease.deteccion}</p>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                <section className="bg-slate-50 p-7 rounded-[2rem] border border-slate-100">
+                                                    <h4 className="flex items-center gap-3 font-black uppercase text-[10px] text-blue-600 mb-4 tracking-widest">
+                                                        <Icon name="search" size={18} /> Detección de Síntomas
+                                                    </h4>
+                                                    <p className="text-sm leading-relaxed text-slate-700 font-bold">{selectedDisease.deteccion}</p>
+                                                </section>
+                                                <section className="bg-green-50 p-7 rounded-[2rem] border border-green-100">
+                                                    <h4 className="flex items-center gap-3 font-black uppercase text-[10px] text-green-700 mb-4 tracking-widest">
+                                                        <Icon name="shield" size={18} /> Protocolo Prevención
+                                                    </h4>
+                                                    <p className="text-sm leading-relaxed text-green-800 font-bold">{selectedDisease.prevencion}</p>
+                                                </section>
+                                            </div>
+                                            <section className="bg-blue-600 p-8 rounded-[2rem] text-white shadow-xl shadow-blue-100">
+                                                <h4 className="flex items-center gap-3 font-black uppercase text-[10px] text-blue-200 mb-4 tracking-widest">
+                                                    <Icon name="activity" size={18} color="white" /> Plan de Acción Sugerido
+                                                </h4>
+                                                <p className="text-lg leading-relaxed font-extrabold">{selectedDisease.queHacer}</p>
                                             </section>
-                                            <section className="bg-green-50 p-6 rounded-3xl border border-green-100">
-                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-green-700 mb-3 tracking-widest"><Icon name="shield" size={16} /> Prevención</h4>
-                                                <p className="text-sm leading-relaxed text-green-800 font-medium">{selectedDisease.prevencion}</p>
-                                            </section>
-                                            <section className="bg-blue-50 p-6 rounded-3xl border border-blue-100">
-                                                <h4 className="flex items-center gap-2 font-black uppercase text-[10px] text-blue-700 mb-3 tracking-widest"><Icon name="activity" size={16} /> Plan de Acción</h4>
-                                                <p className="text-sm leading-relaxed text-blue-800 font-medium">{selectedDisease.queHacer}</p>
-                                            </section>
-                                            <div className="bg-amber-50 border border-amber-200 p-5 rounded-3xl flex gap-4">
-                                                <div className="shrink-0 mt-0.5"><Icon name="alert" color="#d97706" size={20} /></div>
-                                                <p className="text-[10px] text-amber-800 font-bold uppercase leading-tight tracking-tight text-justify italic">Aviso Salud UCN: No te automediques. La prescripción farmacológica es responsabilidad exclusiva de un médico.</p>
+                                            <div className="bg-amber-50 border border-amber-200 p-6 rounded-[2rem] flex gap-5">
+                                                <div className="shrink-0 mt-0.5"><Icon name="alert" color="#d97706" size={24} /></div>
+                                                <div>
+                                                    <p className="text-[11px] text-amber-900 font-black uppercase leading-tight tracking-tight mb-1">Aviso de Seguridad Médica</p>
+                                                    <p className="text-xs text-amber-800 font-medium leading-relaxed italic">Salud UCN: Esta ficha es orientativa. No sustituye la consulta médica profesional. Evite la automedicación bajo cualquier circunstancia.</p>
+                                                </div>
                                             </div>
                                         </React.Fragment>
                                     ) : (
-                                        <div className="space-y-6">
-                                            <div className="flex justify-center py-8 bg-slate-50 rounded-[2.5rem] mb-4 scale-125">{selectedHabit.icono}</div>
-                                            <section className="bg-indigo-50 p-8 rounded-[2.5rem] border border-indigo-100">
-                                                <h4 className="font-black uppercase text-[11px] text-indigo-900 mb-4 tracking-widest flex items-center gap-2"><Icon name="zap" size={16} /> Ciencia y Salud</h4>
-                                                <p className="text-base leading-relaxed text-indigo-950 font-medium italic">"{selectedHabit.detalles}"</p>
+                                        <div className="space-y-10">
+                                            <div className="flex justify-center py-12 bg-slate-50 rounded-[3rem] mb-4">
+                                                <div className="scale-[2.5]">{selectedHabit.icono}</div>
+                                            </div>
+                                            <section className="bg-indigo-900 p-10 rounded-[3rem] border border-indigo-800 shadow-2xl">
+                                                <h4 className="font-black uppercase text-[11px] text-indigo-300 mb-6 tracking-widest flex items-center gap-3">
+                                                    <Icon name="zap" size={20} color="#a5b4fc" /> Fundamentos de Bienestar
+                                                </h4>
+                                                <p className="text-2xl leading-relaxed text-white font-black italic tracking-tight">"{selectedHabit.detalles}"</p>
                                             </section>
                                         </div>
                                     )}
-                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl active:scale-95 transition-all uppercase tracking-widest">Cerrar</button>
+                                    <button onClick={() => { setSelectedDisease(null); setSelectedHabit(null); }} className="w-full bg-slate-900 hover:bg-black text-white py-6 rounded-2xl font-black shadow-xl active:scale-95 transition-all uppercase tracking-[0.2em] mt-6">Entendido</button>
                                 </div>
                             </div>
                         </div>
