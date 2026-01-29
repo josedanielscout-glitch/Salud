@@ -577,13 +577,35 @@
                     <main className="px-8 pt-8 animate-fade pb-16">
                         {view === 'home' && (
                             <div className="space-y-10">
-                                <div className="bg-slate-900 rounded-[2.5rem] p-12 text-white relative overflow-hidden shadow-2xl group">
-                                    <img 
-                                        src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?auto=format&fit=crop&q=80&w=2000" 
-                                        alt="Fondo Médico" 
-                                        className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-700"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
+                                <div className="bg-slate-900 rounded-[2.5rem] p-12 text-white relative overflow-hidden shadow-2xl group transition-all duration-500 hover:shadow-blue-900/20">
+                                    {/* Composición de Imágenes de Fondo */}
+                                    <div className="absolute inset-0 w-full h-full group-hover:scale-105 transition-transform duration-1000">
+                                        {/* Imagen 1: Base Médica - Cubre todo */}
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?auto=format&fit=crop&q=80&w=2000" 
+                                            alt="Fondo Médico" 
+                                            className="absolute inset-0 w-full h-full object-cover opacity-20"
+                                        />
+                                        
+                                        {/* Imagen 2: Vida Universitaria/Estudiantes - Mitad derecha */}
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2000" 
+                                            alt="Estudiantes" 
+                                            className="absolute right-0 top-0 w-3/4 h-full object-cover opacity-30 mix-blend-overlay"
+                                            style={{maskImage: 'linear-gradient(to right, transparent, black)'}}
+                                        />
+
+                                        {/* Imagen 3: Bienestar y Naturaleza - Acento */}
+                                        <img 
+                                            src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=2000" 
+                                            alt="Bienestar" 
+                                            className="absolute right-0 bottom-0 w-1/2 h-2/3 object-cover opacity-20 mix-blend-soft-light"
+                                        />
+                                    </div>
+
+                                    {/* Gradiente de Superposición para Legibilidad */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/30"></div>
+                                    
                                     <div className="relative z-10 max-w-2xl">
                                         <h2 className="text-4xl font-extrabold mb-2 tracking-tight">Portal de Bienestar Salud UCN</h2>
                                         <p className="text-slate-400 mb-8 text-lg font-medium leading-relaxed">Tu enciclopedia médica universitaria con 150 condiciones detalladas y herramientas de diagnóstico preventivo.</p>
@@ -591,7 +613,7 @@
                                             <div className="absolute left-4 top-4"><Icon name="search" color="#94a3b8" size={20} /></div>
                                             <input 
                                                 type="text" placeholder="¿Qué síntoma o condición buscas?..."
-                                                className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 pl-12 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500 transition-all text-white"
+                                                className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 pl-12 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500 transition-all text-white backdrop-blur-sm"
                                                 onFocus={() => setView('diseases')}
                                             />
                                         </div>
