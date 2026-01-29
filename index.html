@@ -584,14 +584,14 @@
                                         <img 
                                             src="https://images.unsplash.com/photo-1538108149393-fbbd8189718c?auto=format&fit=crop&q=80&w=2000" 
                                             alt="Fondo Médico" 
-                                            className="absolute inset-0 w-full h-full object-cover opacity-20"
+                                            className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-overlay"
                                         />
                                         
                                         {/* Imagen 2: Vida Universitaria/Estudiantes - Mitad derecha */}
                                         <img 
                                             src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2000" 
                                             alt="Estudiantes" 
-                                            className="absolute right-0 top-0 w-3/4 h-full object-cover opacity-30 mix-blend-overlay"
+                                            className="absolute right-0 top-0 w-3/4 h-full object-cover opacity-60 mix-blend-soft-light"
                                             style={{maskImage: 'linear-gradient(to right, transparent, black)'}}
                                         />
 
@@ -599,27 +599,27 @@
                                         <img 
                                             src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=2000" 
                                             alt="Bienestar" 
-                                            className="absolute right-0 bottom-0 w-1/2 h-2/3 object-cover opacity-20 mix-blend-soft-light"
+                                            className="absolute right-0 bottom-0 w-1/2 h-2/3 object-cover opacity-50 mix-blend-screen"
                                         />
                                     </div>
 
-                                    {/* Gradiente de Superposición para Legibilidad */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/30"></div>
+                                    {/* Gradiente de Superposición para Legibilidad - Ajustado para mostrar más imagen */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
                                     
                                     <div className="relative z-10 max-w-2xl">
-                                        <h2 className="text-4xl font-extrabold mb-2 tracking-tight">Portal de Bienestar Salud UCN</h2>
-                                        <p className="text-slate-400 mb-8 text-lg font-medium leading-relaxed">Tu enciclopedia médica universitaria con 150 condiciones detalladas y herramientas de diagnóstico preventivo.</p>
+                                        <h2 className="text-4xl font-extrabold mb-2 tracking-tight drop-shadow-lg">Portal de Bienestar Salud UCN</h2>
+                                        <p className="text-slate-100 mb-8 text-lg font-medium leading-relaxed drop-shadow-md">Tu enciclopedia médica universitaria con 150 condiciones detalladas y herramientas de diagnóstico preventivo.</p>
                                         <div className="relative max-w-md">
                                             <div className="absolute left-4 top-4"><Icon name="search" color="#94a3b8" size={20} /></div>
                                             <input 
                                                 type="text" placeholder="¿Qué síntoma o condición buscas?..."
-                                                className="w-full bg-white/10 border border-white/20 rounded-2xl py-4 pl-12 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-500 transition-all text-white backdrop-blur-sm"
+                                                className="w-full bg-white/20 border border-white/30 rounded-2xl py-4 pl-12 pr-6 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-200 transition-all text-white backdrop-blur-md shadow-lg"
                                                 onFocus={() => setView('diseases')}
                                             />
                                         </div>
                                     </div>
                                     {/* Elementos decorativos abstractos mantenidos pero sutiles */}
-                                    <div className="absolute -top-24 -right-24 w-80 h-80 bg-blue-600/30 rounded-full blur-[100px] mix-blend-overlay"></div>
+                                    <div className="absolute -top-24 -right-24 w-80 h-80 bg-blue-500/40 rounded-full blur-[100px] mix-blend-overlay"></div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
