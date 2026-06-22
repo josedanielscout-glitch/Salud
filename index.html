@@ -9,8 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- React & Babel -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script>
@@ -96,11 +96,21 @@
             scrollbar-color: #a855f7 transparent;
         }
     </style>
+    
+    <script>
+        // Configurar Babel para forzar el uso del "runtime clásico" y 
+        // evitar el error de importación de "react/jsx-runtime" en React 18.
+        Babel.registerPreset('react-classic', {
+            presets: [
+                [Babel.availablePresets['react'], { runtime: 'classic' }]
+            ]
+        });
+    </script>
 </head>
 <body class="text-slate-800">
     <div id="root"></div>
 
-    <script type="text/babel">
+    <script type="text/babel" data-presets="react-classic">
         const { useState, useMemo, useRef } = React;
 
         const SVGIcon = ({ name, size = 24, color = "currentColor", className = "", fill = "none" }) => {
@@ -643,7 +653,7 @@
                                 <div 
                                     className="rounded-[3rem] p-10 sm:p-16 text-white relative overflow-hidden shadow-glow-blue border border-white/20 group"
                                     style={{
-                                        backgroundImage: 'linear-gradient(to right, rgba(30, 58, 138, 0.85), rgba(88, 28, 135, 0.85)), url("https://images.unsplash.com/photo-1624727828489-a1e03b79bba8?auto=format&fit=crop&w=1200&q=80")',
+                                        backgroundImage: 'linear-gradient(to right, rgba(30, 58, 138, 0.85), rgba(88, 28, 135, 0.85)), url("https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80")',
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'center'
                                     }}
